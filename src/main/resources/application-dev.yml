@@ -6,9 +6,9 @@ custom:
 
 spring:
   datasource:
-    url: jdbc:postgresql://${custom.db.host}:${custom.db.port}/${custom.db.name}
-    username: ${custom.db.username}
-    password: ${custom.db.password}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
