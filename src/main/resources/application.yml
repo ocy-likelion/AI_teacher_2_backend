@@ -1,5 +1,3 @@
-server:
-  port: 8080
 spring:
   output:
     ansi:
@@ -22,10 +20,3 @@ logging:
     org.hibernate.SQL: OFF
     org.hibernate.orm.jdbc.bind: OFF
     org.springframework.transaction.interceptor: OFF
-
-custom:
-  site:
-    name: "ilta_dev"
-    cookieDomain: "${custom.dev.cookieDomain}"  # dev/prod에서 override됨
-    frontUrl: "${custom.dev.frontUrl}"
-    backUrl: "${custom.dev.backUrl}"
