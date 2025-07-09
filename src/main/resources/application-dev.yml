@@ -1,0 +1,12 @@
+custom:
+  dev:
+    cookieDomain: localhost
+    frontUrl: "http://localhost:5173"
+    backUrl: "http://localhost:8080"
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${custom.db.host}:${custom.db.port}/${custom.db.name}
+    username: ${custom.db.username}
+    password: ${custom.db.password}
+    driver-class-name: org.postgresql.Driver

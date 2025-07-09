@@ -1,6 +1,31 @@
-spring:
-  profiles:
-    active: dev
-
 server:
   port: 8080
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  profiles:
+    active: dev   # 배포 환경 시 prod, 개발 환경 시 dev 설정
+    include: secret
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false #true
+
+logging:
+  level:
+    com.ll.Alta: DEBUG
+    org.hibernate.SQL: OFF # DEBUG
+    org.hibernate.orm.jdbc.bind: OFF # TRACE
+    org.springframework.transaction.interceptor: OFF # TRACE
+
+custom:
+  site:
+    name: "YOUR PROJECT" #프로젝트 이름
+    cookieDomain: "${custom.dev.cookieDomain}"  # dev/prod에서 override됨
+    frontUrl: "${custom.dev.frontUrl}"
+    backUrl: "${custom.dev.backUrl}"
