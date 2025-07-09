@@ -10,3 +10,9 @@ spring:
     username: ${custom.db.username}
     password: ${custom.db.password}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 10
+      idle-timeout: 300000
+      connection-timeout: 30000
+      max-lifetime: 1500000
