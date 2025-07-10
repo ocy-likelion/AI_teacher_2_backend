@@ -1,5 +1,6 @@
 package com.ll.ilta.domain.problem.entity;
 
+import com.ll.ilta.domain.child.entity.Child;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
