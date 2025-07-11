@@ -20,7 +20,10 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
+            .formLogin(form -> form.disable()) // 기본 로그인 폼 비활성화
+            .httpBasic(httpBasic -> httpBasic.disable()) // HTTP Basic 비활성화
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/member/login").permitAll() // 로그인은 모두 허용
                 .anyRequest().permitAll()
             );
 
