@@ -1,0 +1,15 @@
+name: Scheduled Ping to Render App
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # 매 15분마다 실행
+  workflow_dispatch: # 수동 실행
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: scheduled ping
+        uses: sisodiya2421/pinger@v3
+        with:
+          url: 'https://ilta-api.onrender.com'
