@@ -39,7 +39,7 @@
 
 ### 프로토타입
 
-<img src="https://github.com/user-attachments/assets/dc578fc4-f6e3-4b1e-90f1-a54c1b1f3d48.jpg">
+<img src="https://github.com/user-attachments/assets/0cd10e61-fb6e-40fb-9733-723e143e947d">
 
 <br />
 
