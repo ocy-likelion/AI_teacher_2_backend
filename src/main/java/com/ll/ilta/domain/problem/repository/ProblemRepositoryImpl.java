@@ -1,21 +1,16 @@
 package com.ll.ilta.domain.problem.repository;
 
 import static com.ll.ilta.domain.favorite.entity.QFavorite.favorite;
-import static com.ll.ilta.domain.problem.entity.QConcept.concept;
 import static com.ll.ilta.domain.problem.entity.QProblem.problem;
-import static com.ll.ilta.domain.problem.entity.QProblemConcept.problemConcept;
 import static com.ll.ilta.domain.problem.entity.QProblemImage.problemImage;
 import static com.ll.ilta.domain.problem.entity.QProblemResult.problemResult;
 
-import com.ll.ilta.domain.problem.dto.ProblemConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemDto;
 import com.ll.ilta.global.common.service.CursorUtil;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -56,7 +51,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             return List.of();
         }
 
-        return buildProblemDtos(childId, problemIds);
+        return fetchProblems(childId, problemIds);
     }
 
     @Override
@@ -81,35 +76,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             return null;
         }
 
-        Map<Long, List<ProblemConceptDto>> conceptMap = fetchConceptsMap(List.of(problemId));
-
-        ProblemDto p = problems.getFirst();
-        return ProblemDto.of(
-            p.getId(),
-            p.getImageId(),
-            conceptMap.getOrDefault(p.getId(), List.of()),
-            p.getFavorite(),
-            p.getOcrResult(),
-            p.getLlmResult(),
-            p.getCreatedAt()
-        );
-    }
-
-    private List<ProblemDto> buildProblemDtos(Long childId, List<Long> problemIds) {
-        List<ProblemDto> problems = fetchProblems(childId, problemIds);
-        Map<Long, List<ProblemConceptDto>> conceptMap = fetchConceptsMap(problemIds);
-
-        return problems.stream()
-            .map(p -> ProblemDto.of(
-                p.getId(),
-                p.getImageId(),
-                conceptMap.getOrDefault(p.getId(), List.of()),
-                p.getFavorite(),
-                p.getOcrResult(),
-                p.getLlmResult(),
-                p.getCreatedAt()
-            ))
-            .toList();
+        return problems.get(0);
     }
 
     private List<ProblemDto> fetchProblems(Long childId, List<Long> problemIds) {
@@ -129,21 +96,5 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             .where(problem.id.in(problemIds))
             .orderBy(problem.createdAt.desc(), problem.id.desc())
             .fetch();
-    }
-
-    private Map<Long, List<ProblemConceptDto>> fetchConceptsMap(List<Long> problemIds) {
-        List<ProblemConceptDto> concepts = queryFactory
-            .select(Projections.constructor(ProblemConceptDto.class,
-                problemConcept.id,
-                problemConcept.concept.name,
-                problemConcept.problem.id
-            ))
-            .from(problemConcept)
-            .join(problemConcept.concept, concept)
-            .where(problemConcept.problem.id.in(problemIds))
-            .fetch();
-
-        return concepts.stream()
-            .collect(Collectors.groupingBy(ProblemConceptDto::getProblemId));
     }
 }

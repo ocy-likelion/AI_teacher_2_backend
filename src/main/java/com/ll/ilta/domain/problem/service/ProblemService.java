@@ -1,12 +1,16 @@
 package com.ll.ilta.domain.problem.service;
 
+import com.ll.ilta.domain.problem.dto.ProblemConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemDto;
 
+import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.repository.FavoriteRepository;
+import com.ll.ilta.domain.problem.repository.ProblemConceptRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponse;
 import com.ll.ilta.global.common.service.CursorUtil;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,14 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProblemService {
     private final ProblemRepository problemRepository;
+    private final ProblemConceptRepository problemConceptRepository;
     private final FavoriteRepository favoriteRepository;
     private static final String PROBLEMS_LIST_URL = "/api/v1/problems/list";
 
-    public CursorPaginatedResponse<ProblemDto> getProblemList (Long childId, int limit, String afterCursor) {
-        List<ProblemDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit+1);
+    public CursorPaginatedResponse<ProblemResponseDto> getProblemList(Long childId, int limit, String afterCursor) {
+        List<ProblemDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit + 1);
 
         if (problems.isEmpty()) {
-            return CursorPaginatedResponse.of(problems, limit, false, null,
+            return CursorPaginatedResponse.of(List.of(), limit, false, null,
                 buildSelfUrl(limit, afterCursor), null);
         }
 
@@ -30,6 +35,13 @@ public class ProblemService {
         if (hasNextPage) {
             problems = problems.subList(0, limit);
         }
+
+        List<Long> problemIds = problems.stream().map(ProblemDto::getId).toList();
+        Map<Long, List<ProblemConceptDto>> conceptsMap = problemConceptRepository.findConceptsByProblemIds(problemIds);
+
+        List<ProblemResponseDto> responseDtos = problems.stream()
+            .map(p -> ProblemResponseDto.of(p, conceptsMap.getOrDefault(p.getId(), List.of())))
+            .toList();
 
         String nextCursor = null;
         if (hasNextPage) {
@@ -40,8 +52,7 @@ public class ProblemService {
         String selfUrl = buildSelfUrl(limit, afterCursor);
         String nextUrl = hasNextPage ? buildNextUrl(limit, nextCursor) : null;
 
-        return CursorPaginatedResponse.of(problems, limit, hasNextPage, nextCursor, selfUrl, nextUrl);
-
+        return CursorPaginatedResponse.of(responseDtos, limit, hasNextPage, nextCursor, selfUrl, nextUrl);
     }
 
     private String buildSelfUrl(int limit, String afterCursor) {
