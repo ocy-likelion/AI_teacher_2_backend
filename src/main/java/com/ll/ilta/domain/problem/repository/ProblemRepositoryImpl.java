@@ -9,6 +9,7 @@ import static com.ll.ilta.domain.problem.entity.QProblemResult.problemResult;
 
 import com.ll.ilta.domain.problem.dto.ProblemConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemDto;
+import com.ll.ilta.global.common.dto.Cursor;
 import com.ll.ilta.global.common.service.CursorUtil;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -26,10 +27,10 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ProblemDto> findProblemWithCursor(Long childId, String afterCursor, int limit) {
-        BooleanBuilder builder = new BooleanBuilder(problem.child.id.eq(childId));
+    public List<ProblemDto> findProblemWithCursor(Long memberId, String afterCursor, int limit) {
+        BooleanBuilder builder = new BooleanBuilder(problem.member.id.eq(memberId));
         if (afterCursor != null) {
-            CursorUtil.Cursor decoded = CursorUtil.decodeCursor(afterCursor);
+            Cursor decoded = CursorUtil.decodeCursor(afterCursor);
             builder.and(
                 problem.createdAt.lt(decoded.createdAt())
                     .or(
@@ -56,7 +57,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             return List.of();
         }
 
-        return buildProblemDtos(childId, problemIds);
+        return buildProblemDtos(memberId, problemIds);
     }
 
     @Override
@@ -125,7 +126,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             .from(problem)
             .leftJoin(problem.image, problemImage)
             .leftJoin(problem.result, problemResult)
-            .leftJoin(favorite).on(favorite.problem.id.eq(problem.id).and(favorite.child.id.eq(childId)))
+            .leftJoin(favorite).on(favorite.problem.id.eq(problem.id).and(favorite.member.id.eq(childId)))
             .where(problem.id.in(problemIds))
             .orderBy(problem.createdAt.desc(), problem.id.desc())
             .fetch();

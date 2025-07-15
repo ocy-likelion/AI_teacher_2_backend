@@ -2,7 +2,7 @@ package com.ll.ilta.domain.problem.controller;
 
 import com.ll.ilta.domain.problem.dto.ProblemDto;
 import com.ll.ilta.domain.problem.service.ProblemService;
-import com.ll.ilta.global.common.dto.CursorPaginatedResponse;
+import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "ProblemV1Controller", description = "문제와 관련된 CRUD 작업을 수행하는 API입니다.")
-@RequestMapping("/api/v1/problems")
+@RequestMapping("/api/v1/problem")
 @RequiredArgsConstructor
 @RestController
 public class ProblemV1Controller {
@@ -24,12 +24,12 @@ public class ProblemV1Controller {
 
     @Operation(summary = "해설 목록 조회", description = "자녀의 문제 목록을 커서 기반으로 조회합니다. `after_cursor` 파라미터를 사용하여 페이지네이션을 지원합니다.")
     @GetMapping("/list")
-    public ResponseEntity<CursorPaginatedResponse<ProblemDto>> getProblemList(
-        @RequestParam Long childId,
+    public ResponseEntity<CursorPaginatedResponseDto<ProblemDto>> getProblemList(
+        @RequestParam Long memberId,
         @RequestParam(defaultValue = "10") int limit,
         @RequestParam(name = "after_cursor", required = false) String afterCursor
     ) {
-        CursorPaginatedResponse<ProblemDto> response = problemService.getProblemList(childId, limit, afterCursor);
+        CursorPaginatedResponseDto<ProblemDto> response = problemService.getProblemList(memberId, limit, afterCursor);
         return ResponseEntity.ok(response);
     }
 

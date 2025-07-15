@@ -17,7 +17,7 @@ public class ProblemDto {
     private final String llmResult;
     private final LocalDateTime createdAt;
 
-    private ProblemDto(Long id, Long imageId, Boolean favorite, String ocrResult, String llmResult,
+    public ProblemDto(Long id, Long imageId, Boolean favorite, String ocrResult, String llmResult,
         LocalDateTime createdAt) {
         this.id = id;
         this.imageId = imageId;

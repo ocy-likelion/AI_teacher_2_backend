@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.favorite.entity;
 
-import com.ll.ilta.domain.child.entity.Child;
+import com.ll.ilta.domain.member.v1.entity.Member;
 import com.ll.ilta.domain.problem.entity.Problem;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,8 +33,8 @@ public class Favorite {
     private Problem problem;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "child_id", nullable = false)
-    private Child child;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @CreatedDate
     @Column(updatable = false)

@@ -4,7 +4,7 @@ import com.ll.ilta.domain.problem.dto.ProblemDto;
 
 import com.ll.ilta.domain.problem.repository.FavoriteRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
-import com.ll.ilta.global.common.dto.CursorPaginatedResponse;
+import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import com.ll.ilta.global.common.service.CursorUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProblemService {
     private final ProblemRepository problemRepository;
     private final FavoriteRepository favoriteRepository;
-    private static final String PROBLEMS_LIST_URL = "/api/v1/problems/list";
+    private static final String PROBLEMS_LIST_URL = "/api/v1/problem/list";
 
-    public CursorPaginatedResponse<ProblemDto> getProblemList(Long childId, int limit, String afterCursor) {
+    public CursorPaginatedResponseDto<ProblemDto> getProblemList(Long childId, int limit, String afterCursor) {
         List<ProblemDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit+1);
 
         if (problems.isEmpty()) {
-            return CursorPaginatedResponse.of(problems, limit, false, null,
+            return CursorPaginatedResponseDto.of(problems, limit, false, null,
                 buildSelfUrl(limit, afterCursor), null);
         }
 
@@ -40,7 +40,7 @@ public class ProblemService {
         String selfUrl = buildSelfUrl(limit, afterCursor);
         String nextUrl = hasNextPage ? buildNextUrl(limit, nextCursor) : null;
 
-        return CursorPaginatedResponse.of(problems, limit, hasNextPage, nextCursor, selfUrl, nextUrl);
+        return CursorPaginatedResponseDto.of(problems, limit, hasNextPage, nextCursor, selfUrl, nextUrl);
 
     }
 
