@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-@Repository
 @RequiredArgsConstructor
+@Repository
 public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;

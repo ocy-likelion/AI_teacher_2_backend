@@ -7,6 +7,9 @@ import java.util.Base64;
 
 public class CursorUtil {
 
+    public record Cursor(Long id, LocalDateTime createdAt) {
+    }
+
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public static String encodeCursor(Long id, LocalDateTime createdAt) {
@@ -24,9 +27,5 @@ public class CursorUtil {
         Long id = Long.parseLong(parts[0]);
         LocalDateTime createdAt = LocalDateTime.parse(parts[1], FORMATTER);
         return new Cursor(id, createdAt);
-    }
-
-    public record Cursor(Long id, LocalDateTime createdAt) {
-
     }
 }

@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Tag(name = "ProblemV1Controller", description = "문제와 관련된 CRUD 작업을 수행하는 API입니다.")
 @RequestMapping("/api/v1/problems")
 @RequiredArgsConstructor
-@Tag(name = "ProblemV1Controller", description = "문제와 관련된 CRUD 작업을 수행하는 API입니다.")
+@RestController
 public class ProblemV1Controller {
 
     private final ProblemService problemService;
 
-    @GetMapping("/list")
     @Operation(summary = "해설 목록 조회", description = "자녀의 문제 목록을 커서 기반으로 조회합니다. `after_cursor` 파라미터를 사용하여 페이지네이션을 지원합니다.")
+    @GetMapping("/list")
     public ResponseEntity<CursorPaginatedResponse<ProblemDto>> getProblemList(
         @RequestParam Long childId,
         @RequestParam(defaultValue = "10") int limit,
@@ -33,17 +33,17 @@ public class ProblemV1Controller {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
     @Operation(summary = "해설 단건 조회", description = "문제 ID를 사용하여 문제의 상세 정보를 조회합니다.")
-    public ResponseEntity<ProblemDto> getProblem(@RequestParam Long id) {
-        ProblemDto response = problemService.getProblemDetail(id);
+    @GetMapping
+    public ResponseEntity<ProblemDto> getProblem(@RequestParam Long problemId) {
+        ProblemDto response = problemService.getProblemDetail(problemId);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping
     @Operation(summary = "해설 삭제", description = "문제 ID를 사용하여 문제를 삭제합니다.")
-    public ResponseEntity<Map<String, String>> deleteProblem(@RequestParam Long id) {
-        problemService.deleteProblem(id);
+    @DeleteMapping
+    public ResponseEntity<Map<String, String>> deleteProblem(@RequestParam Long problemId) {
+        problemService.deleteProblem(problemId);
         return ResponseEntity.ok(Map.of("message", "문제가 삭제되었습니다."));
     }
 }

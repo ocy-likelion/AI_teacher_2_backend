@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ProblemRepositoryCustom {
 
-    List<ProblemDto> findProblemWithCursor(Long ChildId, String afterCursor, int limit);
+    List<ProblemDto> findProblemWithCursor(Long childId, String afterCursor, int limit);
 
-    ProblemDto findProblemById(Long id);
+    ProblemDto findProblemById(Long problemId);
 }

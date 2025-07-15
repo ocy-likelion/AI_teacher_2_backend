@@ -11,14 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class ProblemService {
     private final ProblemRepository problemRepository;
     private final FavoriteRepository favoriteRepository;
     private static final String PROBLEMS_LIST_URL = "/api/v1/problems/list";
 
-    public CursorPaginatedResponse<ProblemDto> getProblemList (Long childId, int limit, String afterCursor) {
+    public CursorPaginatedResponse<ProblemDto> getProblemList(Long childId, int limit, String afterCursor) {
         List<ProblemDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit+1);
 
         if (problems.isEmpty()) {

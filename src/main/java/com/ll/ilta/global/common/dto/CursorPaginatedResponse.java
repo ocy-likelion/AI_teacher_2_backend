@@ -12,12 +12,12 @@ public class CursorPaginatedResponse<T> {
     private Pagination pagination;
     private Links links;
 
-    public static <T> CursorPaginatedResponse<T> of(List<T> data, int limit,
+    public static <T> CursorPaginatedResponse<T> of(List<T> problems, int limit,
         boolean hasNextPage, String nextCursor,
         String selfUrl, String nextUrl) {
         Pagination pagination = new Pagination(limit, hasNextPage, nextCursor);
         Links links = new Links(selfUrl, nextUrl);
-        return new CursorPaginatedResponse<>(data, pagination, links);
+        return new CursorPaginatedResponse<>(problems, pagination, links);
     }
 
     @Getter

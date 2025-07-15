@@ -6,30 +6,30 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
 @Getter
 public class ProblemDto {
 
-    private Long id;
-    private Long imageId;
-    private List<ProblemConceptDto> concepts;
-    private Boolean favorite;
-    private String ocrResult;
-    private String llmResult;
-    private LocalDateTime createdAt;
+    private final Long id;
+    private final Long imageId;
+    private final List<ProblemConceptDto> concepts;
+    private final Boolean favorite;
+    private final String ocrResult;
+    private final String llmResult;
+    private final LocalDateTime createdAt;
 
-    public ProblemDto(Long id, Long imageId, Boolean favorite, String ocrResult, String llmResult,
+    private ProblemDto(Long id, Long imageId, Boolean favorite, String ocrResult, String llmResult,
         LocalDateTime createdAt) {
         this.id = id;
         this.imageId = imageId;
-        this.concepts = new ArrayList<>(); // 빈 리스트로 초기화
+        this.concepts = new ArrayList<>();
         this.favorite = favorite;
         this.ocrResult = ocrResult;
         this.llmResult = llmResult;
         this.createdAt = createdAt;
     }
 
-    public ProblemDto(Long id, Long imageId, List<ProblemConceptDto> concepts, Boolean favorite, String ocrResult,
+    @Builder
+    private ProblemDto(Long id, Long imageId, List<ProblemConceptDto> concepts, Boolean favorite, String ocrResult,
         String llmResult, LocalDateTime createdAt) {
         this.id = id;
         this.imageId = imageId;
