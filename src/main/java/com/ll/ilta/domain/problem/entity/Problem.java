@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.problem.entity;
 
-import com.ll.ilta.domain.child.entity.Child;
+import com.ll.ilta.domain.member.v1.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -43,8 +43,8 @@ public class Problem {
     private ProblemResult result;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "child_id", nullable = false)
-    private Child child;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @CreatedDate
     @Column(updatable = false)
