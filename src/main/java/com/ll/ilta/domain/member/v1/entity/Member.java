@@ -22,10 +22,10 @@ public class Member {
 
     private Long id;
 
-    private String username;  // 로그인용 ID
-    private String password;  // 로그인 비밀번호
-    private String name;      // 이름 (자녀 이름 가능)
-    private Integer grade;    // 자녀 학년
+    private String username;
+    private String password;
+    private String name;      // 자녀 이름
+    private Integer grade;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -22,7 +22,6 @@ public class MemberRequestDto {
         this.grade = grade;
     }
 
-    // 정적 팩토리 메서드
     public static MemberRequestDto of(String username, String password, String name, Integer grade) {
         return MemberRequestDto.builder()
             .username(username)
