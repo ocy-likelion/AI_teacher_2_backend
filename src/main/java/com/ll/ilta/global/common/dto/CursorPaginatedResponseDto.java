@@ -8,16 +8,16 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CursorPaginatedResponseDto<T> {
 
-    private List<T> problems;
+    private List<T> data;
     private Pagination pagination;
     private Links links;
 
-    public static <T> CursorPaginatedResponseDto<T> of(List<T> problems, int limit,
+    public static <T> CursorPaginatedResponseDto<T> of(List<T> data, int limit,
         boolean hasNextPage, String nextCursor,
         String selfUrl, String nextUrl) {
         Pagination pagination = new Pagination(limit, hasNextPage, nextCursor);
         Links links = new Links(selfUrl, nextUrl);
-        return new CursorPaginatedResponseDto<>(problems, pagination, links);
+        return new CursorPaginatedResponseDto<>(data, pagination, links);
     }
 
     @Getter
