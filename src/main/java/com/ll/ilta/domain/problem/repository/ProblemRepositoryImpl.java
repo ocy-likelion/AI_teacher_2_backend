@@ -65,7 +65,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
         List<ProblemDto> problems = queryFactory
             .select(Projections.constructor(ProblemDto.class,
                 problem.id,
-                problem.image.id,
+                problem.image.imageUrl,
                 favorite.id.isNotNull(),
                 problem.result.ocrResult,
                 problem.result.llmResult,
@@ -87,7 +87,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
         ProblemDto p = problems.getFirst();
         return ProblemDto.of(
             p.getId(),
-            p.getImageId(),
+            p.getImageUrl(),
             conceptMap.getOrDefault(p.getId(), List.of()),
             p.getFavorite(),
             p.getOcrResult(),
@@ -103,7 +103,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
         return problems.stream()
             .map(p -> ProblemDto.of(
                 p.getId(),
-                p.getImageId(),
+                p.getImageUrl(),
                 conceptMap.getOrDefault(p.getId(), List.of()),
                 p.getFavorite(),
                 p.getOcrResult(),
@@ -117,7 +117,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
         return queryFactory
             .select(Projections.constructor(ProblemDto.class,
                 problem.id,
-                problem.image.id,
+                problem.image.imageUrl,
                 favorite.id.isNotNull(),
                 problem.result.ocrResult,
                 problem.result.llmResult,

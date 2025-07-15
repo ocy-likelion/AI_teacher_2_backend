@@ -10,17 +10,17 @@ import lombok.Getter;
 public class ProblemDto {
 
     private final Long id;
-    private final Long imageId;
+    private final String imageUrl;
     private final List<ProblemConceptDto> concepts;
     private final Boolean favorite;
     private final String ocrResult;
     private final String llmResult;
     private final LocalDateTime createdAt;
 
-    public ProblemDto(Long id, Long imageId, Boolean favorite, String ocrResult, String llmResult,
+    public ProblemDto(Long id, String imageUrl, Boolean favorite, String ocrResult, String llmResult,
         LocalDateTime createdAt) {
         this.id = id;
-        this.imageId = imageId;
+        this.imageUrl = imageUrl;
         this.concepts = new ArrayList<>();
         this.favorite = favorite;
         this.ocrResult = ocrResult;
@@ -29,10 +29,10 @@ public class ProblemDto {
     }
 
     @Builder
-    private ProblemDto(Long id, Long imageId, List<ProblemConceptDto> concepts, Boolean favorite, String ocrResult,
+    private ProblemDto(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite, String ocrResult,
         String llmResult, LocalDateTime createdAt) {
         this.id = id;
-        this.imageId = imageId;
+        this.imageUrl = imageUrl;
         this.concepts = concepts != null ? concepts : new ArrayList<>();
         this.favorite = favorite;
         this.ocrResult = ocrResult;
@@ -40,11 +40,11 @@ public class ProblemDto {
         this.createdAt = createdAt;
     }
 
-    public static ProblemDto of(Long id, Long imageId, List<ProblemConceptDto> concepts, Boolean favorite,
+    public static ProblemDto of(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite,
         String ocrResult, String llmResult, LocalDateTime createdAt) {
         return ProblemDto.builder()
             .id(id)
-            .imageId(imageId)
+            .imageUrl(imageUrl)
             .concepts(concepts != null ? concepts : List.of())
             .favorite(favorite)
             .ocrResult(ocrResult)
