@@ -12,4 +12,7 @@ public class MemberLoginRequestDto {
     private String username;
     private String password;
 
+    public static MemberLoginRequestDto of(String username, String password) {
+        return new MemberLoginRequestDto(username, password);
+    }
 }
