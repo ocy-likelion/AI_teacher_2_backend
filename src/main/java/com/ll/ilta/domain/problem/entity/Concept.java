@@ -11,13 +11,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class ProblemImage {
+public class Concept {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imageUrl;
-
-    private Boolean status;
+    private String name;
+    private String description;
 }
