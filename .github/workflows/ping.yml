@@ -2,7 +2,7 @@ name: Scheduled Ping to Render App
 
 on:
   schedule:
-    - cron: '*/15 * * * *' # 매 15분마다 실행
+    - cron: '*/5 * * * *' # 매 5분마다 실행
   workflow_dispatch: # 수동 실행
 
 jobs:
