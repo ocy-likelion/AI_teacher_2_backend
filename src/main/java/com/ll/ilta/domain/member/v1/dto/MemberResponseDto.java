@@ -1,25 +1,31 @@
 package com.ll.ilta.domain.member.v1.dto;
 
-import lombok.AllArgsConstructor;
+import com.ll.ilta.domain.member.v1.entity.Member;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class MemberResponseDto {
 
-    private Long id;
-    private String name;
-    private String username;
-    private Integer grade;
+    private final Long id;
+    private final String name;
+    private final String username;
+    private final Integer grade;
 
-    public static MemberResponseDto fromEntity(com.ll.ilta.domain.member.v1.entity.Member member) {
-        return new MemberResponseDto(
-            member.getId(),
-            member.getUsername(),
-            member.getName(),
-            member.getGrade()
-        );
+    @Builder
+    private MemberResponseDto(Long id, String name, String username, Integer grade) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.grade = grade;
+    }
+
+    public static MemberResponseDto from(Member member) {
+        return MemberResponseDto.builder()
+            .id(member.getId())
+            .name(member.getName())
+            .username(member.getUsername())
+            .grade(member.getGrade())
+            .build();
     }
 }

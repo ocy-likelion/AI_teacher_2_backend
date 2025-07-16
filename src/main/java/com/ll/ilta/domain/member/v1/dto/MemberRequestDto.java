@@ -1,34 +1,33 @@
 package com.ll.ilta.domain.member.v1.dto;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberRequestDto {
 
-    private String name;
-    private Integer grade;
-    private String username;
-    private String password;
+    private final Long id;
+    private final String name;
+    private final Integer grade;
+    private final String username;
+    private final String password;
 
-    @Builder(access = AccessLevel.PRIVATE)
-    private MemberRequestDto(String username, String password, String name, Integer grade) {
+    @Builder
+    private MemberRequestDto(Long id, String username, String password, String name, Integer grade) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.name = name;
         this.grade = grade;
     }
 
-    public static MemberRequestDto of(String username, String password, String name, Integer grade) {
+    public static MemberRequestDto of(Long id, String username, String password, String name, Integer grade) {
         return MemberRequestDto.builder()
+            .id(id)
             .username(username)
             .password(password)
             .name(name)
             .grade(grade)
             .build();
     }
-
 }

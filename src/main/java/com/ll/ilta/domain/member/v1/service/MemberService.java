@@ -1,21 +1,16 @@
 package com.ll.ilta.domain.member.v1.service;
 
 import com.ll.ilta.domain.member.v1.dto.MemberLoginRequestDto;
-import com.ll.ilta.domain.member.v1.repository.MemberRepository;
-import org.springframework.stereotype.Service;
+import com.ll.ilta.domain.member.v1.dto.MemberRequestDto;
+import com.ll.ilta.domain.member.v1.dto.MemberResponseDto;
 
-@Service
-public class MemberService {
-    private final MemberRepository memberRepository;
+public interface MemberService {
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    void login(MemberLoginRequestDto request);
 
-    public boolean login(MemberLoginRequestDto dto) {
-        return memberRepository.findByUsername(dto.getUsername())
-            .map(member -> member.getPassword().equals(dto.getPassword()))
-            .orElse(false);
-    }
+    void createChild(MemberRequestDto request);
 
+    MemberResponseDto updateChild(Long memberId, MemberRequestDto request);
+
+    MemberResponseDto getChild(Long memberId);
 }
