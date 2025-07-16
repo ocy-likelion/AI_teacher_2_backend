@@ -6,7 +6,7 @@ import com.ll.ilta.domain.member.v1.dto.MemberResponseDto;
 
 public interface MemberService {
 
-    void login(MemberLoginRequestDto request);
+    String login(MemberLoginRequestDto request);
 
     void createChild(MemberRequestDto request);
 

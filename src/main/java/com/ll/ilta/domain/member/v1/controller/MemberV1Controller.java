@@ -3,6 +3,7 @@ package com.ll.ilta.domain.member.v1.controller;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.ll.ilta.domain.member.v1.dto.MemberLoginRequestDto;
+import com.ll.ilta.domain.member.v1.dto.MemberLoginResponseDto;
 import com.ll.ilta.domain.member.v1.dto.MemberRequestDto;
 import com.ll.ilta.domain.member.v1.dto.MemberResponseDto;
 import com.ll.ilta.domain.member.v1.service.MemberService;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @Tag(name = "MemberV1Controller", description = "회원 및 자녀 API")
 @RestController
 @RequestMapping(value = "/api/v1/member", produces = APPLICATION_JSON_VALUE)
@@ -33,9 +37,14 @@ public class MemberV1Controller {
 
     @Operation(summary = "로그인 ", description = "아이디/비밀번호 기반 로그인")
     @PostMapping("/login")
-    public ResponseEntity<MessageResponse> login(@RequestBody @Valid MemberLoginRequestDto loginRequest) {
-        memberService.login(loginRequest);
-        return ResponseEntity.ok(MessageResponse.of("✅ 로그인 성공"));
+    public ResponseEntity<MemberLoginResponseDto> login(@RequestBody @Valid MemberLoginRequestDto loginRequest) {
+        log.info("Login API called for username={}", loginRequest.getUsername());
+        String token = memberService.login(loginRequest);
+        log.info("Login API generated token: {}", token);
+
+        MemberLoginResponseDto responseDto = new MemberLoginResponseDto("✅ 로그인 성공", token);
+
+        return ResponseEntity.ok(responseDto);
     }
 
     @Operation(summary = "자녀 생성", description = "자녀 정보를 등록")
