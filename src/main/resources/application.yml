@@ -16,7 +16,8 @@ spring:
 
 logging:
   level:
-    com.ll.Alta: DEBUG
+    root: INFO
+    com.ll.ilta: DEBUG
     org.hibernate.SQL: OFF
     org.hibernate.orm.jdbc.bind: OFF
     org.springframework.transaction.interceptor: OFF
