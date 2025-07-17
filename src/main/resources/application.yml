@@ -1,6 +1,23 @@
 spring:
+  output:
+    ansi:
+      enabled: ALWAYS
   profiles:
-    active: dev
+    active: dev         # 배포 환경 시 prod, 개발 환경 시 dev 설정
+    include: secret
 
-server:
-  port: 8080
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+logging:
+  level:
+    root: INFO
+    com.ll.ilta: DEBUG
+    org.hibernate.SQL: OFF
+    org.hibernate.orm.jdbc.bind: OFF
+    org.springframework.transaction.interceptor: OFF
