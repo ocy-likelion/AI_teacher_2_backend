@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
+@Slf4j //TODO 로그인 기능 개발 완료 후 제거 예정
 @Tag(name = "MemberV1Controller", description = "회원 및 자녀 API")
 @RestController
 @RequestMapping(value = "/api/v1/member", produces = APPLICATION_JSON_VALUE)

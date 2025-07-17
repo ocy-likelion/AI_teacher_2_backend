@@ -21,6 +21,3 @@ logging:
     org.hibernate.SQL: OFF
     org.hibernate.orm.jdbc.bind: OFF
     org.springframework.transaction.interceptor: OFF
-    org.springframework.security.web: DEBUG
-    org.springframework.security.authentication: DEBUG
-    org.springframework.security: DEBUG
