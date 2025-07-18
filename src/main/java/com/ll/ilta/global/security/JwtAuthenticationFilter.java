@@ -26,8 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        // 로그인 경로 및 인증 안 필요한 경로는 토큰 검사 안 함
-        if (path.equals("/api/v1/member/login") || path.equals("/api/v1/member/register")) {
+        // 로그인 및 인증이 필요하지 않은 경로는 JWT 토큰 검사에서 제외
+        if (path.equals("/api/v1/member/login")
+            || path.equals("/api/v1/member/register")
+            || path.equals("/api/v1/image/upload")) { // TODO: 이미지 업로드 JWT 검사에 추가 예정
             filterChain.doFilter(request, response);
             return;
         }
