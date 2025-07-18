@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/image")
+@RequiredArgsConstructor
+@RestController
 public class ImageV1Controller {
     private final ImageUploadService imageUploadService;
 
