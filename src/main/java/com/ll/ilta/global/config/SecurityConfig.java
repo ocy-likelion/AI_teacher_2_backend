@@ -41,6 +41,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/v1/member/login").permitAll() // 로그인은 모두 허용
+                .requestMatchers("/api/v1/image/upload").permitAll() // TODO: JWT 검사 제외로 임시 방편, 추후 제거해야 함
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
