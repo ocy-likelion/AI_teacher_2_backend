@@ -17,7 +17,8 @@ public class ImageV1Controller {
 
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) { // TODO: ResponeDto 구현 필요
-        imageUploadService.uploadImage(file);
+        Long userId = 8L; // TODO: 인증 구현 후 실제 로그인한 유저 ID로 변경
+        imageUploadService.uploadImage(userId, file);
         return ResponseEntity.ok().build();
     }
 }

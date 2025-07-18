@@ -17,12 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 public interface SupabaseFeignClient {
 
     @PostMapping(
-        value = "/storage/v1/object/{bucket}/upload",
+        value = "/storage/v1/object/{bucket}/{path}",
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     void uploadImage(
         @PathVariable("bucket") String bucket,
-        @RequestPart("file") MultipartFile file,
-        @RequestParam("name") String filename
+        @PathVariable("path") String path,
+        @RequestPart("file") MultipartFile file
     );
 }
