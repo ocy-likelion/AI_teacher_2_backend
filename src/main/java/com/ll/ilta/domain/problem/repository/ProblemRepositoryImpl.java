@@ -14,6 +14,7 @@ import com.ll.ilta.global.common.service.CursorUtil;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Map;
@@ -89,10 +90,11 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             builder.and(problem.member.id.eq(memberId));
         }
 
-        return queryFactory.select(Projections.constructor(ProblemResponseDto.class, problem.id,
-                // 이미지 URL은 여기서 안 불러오고 별도 메서드에서 조회
-                // DTO 생성자에 null 허용 필요
-                null, favorite.id.isNotNull(), problem.result.ocrResult, problem.result.llmResult, problem.createdAt))
+        // 이미지 URL은 여기서 안 불러오고 별도 메서드에서 조회
+        // DTO 생성자에 null 허용 필요
+        return queryFactory.select(
+                Projections.constructor(ProblemResponseDto.class, problem.id, Expressions.constant("dummy"),
+                    favorite.id.isNotNull(), problem.result.ocrResult, problem.result.llmResult, problem.createdAt))
             .from(problem).leftJoin(problem.result, problemResult).leftJoin(favorite)
             .on(favorite.problem.id.eq(problem.id).and(memberId != null ? favorite.member.id.eq(memberId) : null))
             .where(builder).orderBy(problem.createdAt.desc(), problem.id.desc()).fetch();
