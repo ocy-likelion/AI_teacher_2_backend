@@ -34,11 +34,7 @@ public class Problem {
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "image_id", nullable = false)
-    private ProblemImage image;
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "result_id", nullable = false)
+    @JoinColumn(name = "result_id")
     private ProblemResult result;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,4 +50,10 @@ public class Problem {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public static Problem of(Member member) {
+        Problem problem = new Problem();
+        problem.member = member;
+        return problem;
+    }
 }

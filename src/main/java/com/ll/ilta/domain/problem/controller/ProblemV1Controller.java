@@ -2,7 +2,7 @@ package com.ll.ilta.domain.problem.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.ll.ilta.domain.problem.dto.ProblemDto;
+import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.service.ProblemService;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,19 +26,18 @@ public class ProblemV1Controller {
 
     @Operation(summary = "해설 목록 조회", description = "커서 기반 페이징 지원")
     @GetMapping("/list")
-    public ResponseEntity<CursorPaginatedResponseDto<ProblemDto>> getProblemList(
-        @RequestParam Long memberId,
+    public ResponseEntity<CursorPaginatedResponseDto<ProblemResponseDto>> getProblemList(@RequestParam Long memberId,
         @RequestParam(defaultValue = "10") int limit,
-        @RequestParam(name = "after_cursor", required = false) String afterCursor
-    ) {
-        CursorPaginatedResponseDto<ProblemDto> response = problemService.getProblemList(memberId, limit, afterCursor);
+        @RequestParam(name = "after_cursor", required = false) String afterCursor) {
+        CursorPaginatedResponseDto<ProblemResponseDto> response = problemService.getProblemList(memberId, limit,
+            afterCursor);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "해설 단건 조회", description = "문제의 상세 정보 조회")
     @GetMapping
-    public ResponseEntity<ProblemDto> getProblem(@RequestParam Long problemId) {
-        ProblemDto response = problemService.getProblemDetail(problemId);
+    public ResponseEntity<ProblemResponseDto> getProblem(@RequestParam Long problemId) {
+        ProblemResponseDto response = problemService.getProblemDetail(problemId);
         return ResponseEntity.ok(response);
     }
 

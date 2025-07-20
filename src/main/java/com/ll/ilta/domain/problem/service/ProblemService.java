@@ -1,29 +1,58 @@
 package com.ll.ilta.domain.problem.service;
 
-import com.ll.ilta.domain.problem.dto.ProblemDto;
+import com.ll.ilta.domain.image.dto.SupabaseUploadResponseDto;
+import com.ll.ilta.domain.image.entity.Image;
+import com.ll.ilta.domain.image.repository.ImageRepository;
+import com.ll.ilta.domain.image.service.SupabaseUploader;
+import com.ll.ilta.domain.member.v1.entity.Member;
+import com.ll.ilta.domain.member.v1.service.MemberService;
+import com.ll.ilta.domain.image.dto.ImageDto;
+import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 
+import com.ll.ilta.domain.problem.entity.Problem;
 import com.ll.ilta.domain.problem.repository.FavoriteRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import com.ll.ilta.global.common.service.CursorUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
 public class ProblemService {
+
+    private final MemberService memberService;
+    private final SupabaseUploader supabaseUploader;
     private final ProblemRepository problemRepository;
+    private final ImageRepository imageRepository;
     private final FavoriteRepository favoriteRepository;
     private static final String PROBLEMS_LIST_URL = "/api/v1/problem/list";
 
-    public CursorPaginatedResponseDto<ProblemDto> getProblemList(Long childId, int limit, String afterCursor) {
-        List<ProblemDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit+1);
+    @Value("${supabase.image-base-url}")
+    private String baseUrl;
+
+    public ImageDto createProblemWithImage(Long userId, MultipartFile file) {
+        Member member = memberService.findById(userId);
+
+        SupabaseUploadResponseDto uploadDto = supabaseUploader.upload(userId, file);
+        String imageUrl = baseUrl + uploadDto.getKey();
+
+        Problem problem = problemRepository.save(Problem.of(member));
+
+        Image image = imageRepository.save(Image.of(imageUrl, problem));
+
+        return ImageDto.of(problem, image);
+    }
+
+    public CursorPaginatedResponseDto<ProblemResponseDto> getProblemList(Long childId, int limit, String afterCursor) {
+        List<ProblemResponseDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit + 1);
 
         if (problems.isEmpty()) {
-            return CursorPaginatedResponseDto.of(problems, limit, false, null,
-                buildSelfUrl(limit, afterCursor), null);
+            return CursorPaginatedResponseDto.of(problems, limit, false, null, buildSelfUrl(limit, afterCursor), null);
         }
 
         boolean hasNextPage = problems.size() > limit;
@@ -33,7 +62,7 @@ public class ProblemService {
 
         String nextCursor = null;
         if (hasNextPage) {
-            ProblemDto lastProblem = problems.get(problems.size() - 1);
+            ProblemResponseDto lastProblem = problems.get(problems.size() - 1);
             nextCursor = CursorUtil.encodeCursor(lastProblem.getId(), lastProblem.getCreatedAt());
         }
 
@@ -56,7 +85,7 @@ public class ProblemService {
         return PROBLEMS_LIST_URL + "?limit=" + limit + "&after_cursor=" + nextCursor;
     }
 
-    public ProblemDto getProblemDetail(Long problemId) {
+    public ProblemResponseDto getProblemDetail(Long problemId) {
         return problemRepository.findProblemById(problemId);
     }
 
@@ -65,5 +94,6 @@ public class ProblemService {
         favoriteRepository.deleteByProblemId(problemId);
         problemRepository.deleteById(problemId);
     }
+
 }
 

@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ProblemDto {
+public class ProblemResponseDto {
 
     private final Long id;
     private final String imageUrl;
@@ -17,7 +17,7 @@ public class ProblemDto {
     private final String llmResult;
     private final LocalDateTime createdAt;
 
-    public ProblemDto(Long id, String imageUrl, Boolean favorite, String ocrResult, String llmResult,
+    public ProblemResponseDto(Long id, String imageUrl, Boolean favorite, String ocrResult, String llmResult,
         LocalDateTime createdAt) {
         this.id = id;
         this.imageUrl = imageUrl;
@@ -29,8 +29,8 @@ public class ProblemDto {
     }
 
     @Builder
-    private ProblemDto(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite, String ocrResult,
-        String llmResult, LocalDateTime createdAt) {
+    private ProblemResponseDto(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite,
+        String ocrResult, String llmResult, LocalDateTime createdAt) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.concepts = concepts != null ? concepts : new ArrayList<>();
@@ -40,16 +40,9 @@ public class ProblemDto {
         this.createdAt = createdAt;
     }
 
-    public static ProblemDto of(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite,
+    public static ProblemResponseDto of(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite,
         String ocrResult, String llmResult, LocalDateTime createdAt) {
-        return ProblemDto.builder()
-            .id(id)
-            .imageUrl(imageUrl)
-            .concepts(concepts != null ? concepts : List.of())
-            .favorite(favorite)
-            .ocrResult(ocrResult)
-            .llmResult(llmResult)
-            .createdAt(createdAt)
-            .build();
+        return ProblemResponseDto.builder().id(id).imageUrl(imageUrl).concepts(concepts != null ? concepts : List.of())
+            .favorite(favorite).ocrResult(ocrResult).llmResult(llmResult).createdAt(createdAt).build();
     }
 }
