@@ -1,23 +1,89 @@
 package com.ll.ilta.domain.problem.service;
 
+import com.ll.ilta.domain.image.dto.SupabaseUploadResponseDto;
+import com.ll.ilta.domain.image.entity.Image;
+import com.ll.ilta.domain.image.repository.ImageRepository;
+import com.ll.ilta.domain.image.service.SupabaseUploader;
+import com.ll.ilta.domain.member.v1.entity.Member;
+import com.ll.ilta.domain.member.v1.service.MemberService;
+import com.ll.ilta.domain.image.dto.ImageDto;
+import com.ll.ilta.domain.problem.client.MathExplainClient;
+import com.ll.ilta.domain.problem.dto.MathExplainRequestDto;
+import com.ll.ilta.domain.problem.dto.MathExplainResponseDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 
+import com.ll.ilta.domain.problem.entity.Problem;
+import com.ll.ilta.domain.problem.entity.ProblemResult;
 import com.ll.ilta.domain.problem.repository.FavoriteRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
+import com.ll.ilta.domain.problem.repository.ProblemResultRepository;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import com.ll.ilta.global.common.service.CursorUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
 public class ProblemService {
 
+    private final MemberService memberService;
+    private final SupabaseUploader supabaseUploader;
     private final ProblemRepository problemRepository;
+    private final ProblemResultRepository problemResultRepository;
+    private final ImageRepository imageRepository;
     private final FavoriteRepository favoriteRepository;
     private static final String PROBLEMS_LIST_URL = "/api/v1/problem/list";
+    private final MathExplainClient mathExplainClient;
+
+    @Value("${supabase.image-base-url}")
+    private String baseUrl;
+
+//    @Transactional
+    public ProblemResponseDto createProblemWithImage(Long userId, MultipartFile file) {
+        Member member = memberService.findById(userId);
+
+        SupabaseUploadResponseDto uploadDto = supabaseUploader.upload(userId, file);
+        String imageUrl = baseUrl + '/' + uploadDto.getKey();
+
+        Problem problem = problemRepository.save(Problem.of(member));
+
+        //        MathExplainResponseDto response = sendImageUrlToPythonServer(imageUrl);
+        MathExplainResponseDto mathExplainResponseDto = mathExplainClient.sendImageToPythonServer(file);
+
+        // 결과 저장
+        ProblemResult result = ProblemResult.of(
+            mathExplainResponseDto.getOcrResult(),
+            mathExplainResponseDto.getLlmResult(),
+            true,
+            problem
+        );
+
+        problemResultRepository.save(result);
+
+        Image image = imageRepository.save(Image.of(imageUrl, problem));
+
+//        return ImageDto.of(problem, image);
+        return ProblemResponseDto.of(
+            problem.getId(),
+            image.getImageUrl(),
+            List.of(),
+            false,
+            result.getOcrResult(),
+            result.getLlmResult(),
+            problem.getCreatedAt()
+        );
+
+    }
+
+
+//    public MathExplainResponseDto sendImageUrlToPythonServer(String imageUrl) {
+//        MathExplainRequestDto request = new MathExplainRequestDto(imageUrl);
+//        return mathExplainClient.sendImageUrlToPythonServer(request);
+//    }
 
     public CursorPaginatedResponseDto<ProblemResponseDto> getProblemList(Long childId, int limit, String afterCursor) {
         List<ProblemResponseDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit + 1);
@@ -65,5 +131,6 @@ public class ProblemService {
         favoriteRepository.deleteByProblemId(problemId);
         problemRepository.deleteById(problemId);
     }
+
 }
 
