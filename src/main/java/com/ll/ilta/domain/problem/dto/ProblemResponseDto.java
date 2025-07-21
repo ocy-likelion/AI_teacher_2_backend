@@ -42,7 +42,14 @@ public class ProblemResponseDto {
 
     public static ProblemResponseDto of(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite,
         String ocrResult, String llmResult, LocalDateTime createdAt) {
-        return ProblemResponseDto.builder().id(id).imageUrl(imageUrl).concepts(concepts != null ? concepts : List.of())
-            .favorite(favorite).ocrResult(ocrResult).llmResult(llmResult).createdAt(createdAt).build();
+        return ProblemResponseDto.builder()
+            .id(id)
+            .imageUrl(imageUrl)
+            .concepts(concepts != null ? concepts : List.of())
+            .favorite(favorite)
+            .ocrResult(ocrResult)
+            .llmResult(llmResult)
+            .createdAt(createdAt)
+            .build();
     }
 }
