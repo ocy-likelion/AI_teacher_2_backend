@@ -33,16 +33,12 @@ public class Problem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "result_id")
-    private ProblemResult result;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProblemConcept> problemConcepts = new ArrayList<>();
+    @OneToOne(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProblemResult result;
 
     @CreatedDate
     @Column(updatable = false)
