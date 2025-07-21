@@ -27,4 +27,4 @@ jwt:
 
 ai:
   service:
-    url: https://ai-teacher-2-ml.onrender.com
+    url: https://ilta-ai.onrender.com
