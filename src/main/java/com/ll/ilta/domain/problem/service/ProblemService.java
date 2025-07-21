@@ -47,7 +47,7 @@ public class ProblemService {
         Member member = memberService.findById(userId);
 
         SupabaseUploadResponseDto uploadDto = supabaseUploader.upload(userId, file);
-        String imageUrl = baseUrl + uploadDto.getKey();
+        String imageUrl = baseUrl + '/' + uploadDto.getKey();
 
         Problem problem = problemRepository.save(Problem.of(member));
 
