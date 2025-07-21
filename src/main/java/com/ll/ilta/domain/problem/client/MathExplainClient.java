@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
 
-@FeignClient(name = "mathExplainClient", url = "http://127.0.0.1:5001", configuration = FeignConfig.class)
+@FeignClient(name = "mathExplainClient", url = "${ai.service.url}", configuration = FeignConfig.class)
 public interface MathExplainClient {
 
     @PostMapping("/math-explain")
