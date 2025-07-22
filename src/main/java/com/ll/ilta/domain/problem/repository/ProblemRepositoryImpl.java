@@ -108,13 +108,12 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
     }
 
     private Map<Long, List<ConceptDto>> fetchConceptsMap(List<Long> problemIds) {
-        List<ProblemConceptDto> concepts = queryFactory.select(
-                Projections.constructor(ProblemConceptDto.class, problemConcept.id, problemConcept.concept.name,
-                    problemConcept.concept.description, problemConcept.problem.id)).from(problemConcept)
-            .join(problemConcept.concept, concept).where(problemConcept.problem.id.in(problemIds)).fetch();
+        List<Tuple> tuples = queryFactory.select(problemConcept.problem.id, concept.name, concept.description)
+            .from(problemConcept).join(problemConcept.concept, concept).where(problemConcept.problem.id.in(problemIds))
+            .fetch();
 
-        return concepts.stream().collect(Collectors.groupingBy(ProblemConceptDto::getProblemId,
-            Collectors.mapping(ProblemConceptDto::toConceptDto, Collectors.toList())));
+        return tuples.stream().collect(Collectors.groupingBy(t -> t.get(problemConcept.problem.id),
+            Collectors.mapping(t -> ConceptDto.of(t.get(concept.name), t.get(concept.description)),
+                Collectors.toList())));
     }
-
 }

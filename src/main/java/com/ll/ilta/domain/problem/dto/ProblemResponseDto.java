@@ -28,6 +28,17 @@ public class ProblemResponseDto {
         this.createdAt = createdAt;
     }
 
+    public ProblemResponseDto(Long id, String imageUrl, Boolean favorite, String ocrResult, String llmResult,
+        LocalDateTime createdAt) {
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.concepts = new ArrayList<>();
+        this.favorite = favorite;
+        this.ocrResult = ocrResult;
+        this.llmResult = llmResult;
+        this.createdAt = createdAt;
+    }
+
     public static ProblemResponseDto of(Long id, String imageUrl, List<ConceptDto> concepts, Boolean favorite,
         String ocrResult, String llmResult, LocalDateTime createdAt) {
         return new ProblemResponseDto(id, imageUrl, concepts, favorite, ocrResult, llmResult, createdAt);
