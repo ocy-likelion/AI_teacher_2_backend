@@ -67,7 +67,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173", "https://ilta.onrender.com", "https://ilta-dev.onrender.com"));
+        config.setAllowedOrigins(List.of(
+            "http://localhost:5173",
+            "https://ilta.onrender.com",
+            "https://ilta-dev.onrender.com",
+            "https://ilta-sk.onrender.com",
+            "https://ilta-th.onrender.com",
+            "https://ilta-ej.onrender.com"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
