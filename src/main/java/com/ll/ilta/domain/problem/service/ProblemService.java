@@ -48,6 +48,7 @@ public class ProblemService {
     @Value("${supabase.image-base-url}")
     private String baseUrl;
 
+    @Transactional
     public ProblemResponseDto createProblemWithImage(Long userId, MultipartFile file) {
         Member member = memberService.findById(userId);
 
