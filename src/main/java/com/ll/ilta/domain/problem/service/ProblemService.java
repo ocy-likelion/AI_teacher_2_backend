@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.problem.service;
 
-import com.ll.ilta.domain.problem.dto.ProblemDto;
+import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 
 import com.ll.ilta.domain.problem.repository.FavoriteRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
@@ -14,16 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class ProblemService {
+
     private final ProblemRepository problemRepository;
     private final FavoriteRepository favoriteRepository;
     private static final String PROBLEMS_LIST_URL = "/api/v1/problem/list";
 
-    public CursorPaginatedResponseDto<ProblemDto> getProblemList(Long childId, int limit, String afterCursor) {
-        List<ProblemDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit+1);
+    public CursorPaginatedResponseDto<ProblemResponseDto> getProblemList(Long childId, int limit, String afterCursor) {
+        List<ProblemResponseDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit + 1);
 
         if (problems.isEmpty()) {
-            return CursorPaginatedResponseDto.of(problems, limit, false, null,
-                buildSelfUrl(limit, afterCursor), null);
+            return CursorPaginatedResponseDto.of(problems, limit, false, null, buildSelfUrl(limit, afterCursor), null);
         }
 
         boolean hasNextPage = problems.size() > limit;
@@ -33,7 +33,7 @@ public class ProblemService {
 
         String nextCursor = null;
         if (hasNextPage) {
-            ProblemDto lastProblem = problems.get(problems.size() - 1);
+            ProblemResponseDto lastProblem = problems.get(problems.size() - 1);
             nextCursor = CursorUtil.encodeCursor(lastProblem.getId(), lastProblem.getCreatedAt());
         }
 
@@ -56,7 +56,7 @@ public class ProblemService {
         return PROBLEMS_LIST_URL + "?limit=" + limit + "&after_cursor=" + nextCursor;
     }
 
-    public ProblemDto getProblemDetail(Long problemId) {
+    public ProblemResponseDto getProblemDetail(Long problemId) {
         return problemRepository.findProblemById(problemId);
     }
 

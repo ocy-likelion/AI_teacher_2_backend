@@ -1,11 +1,11 @@
 package com.ll.ilta.domain.problem.repository;
 
-import com.ll.ilta.domain.problem.dto.ProblemDto;
+import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import java.util.List;
 
 public interface ProblemRepositoryCustom {
 
-    List<ProblemDto> findProblemWithCursor(Long memberId, String afterCursor, int limit);
+    List<ProblemResponseDto> findProblemWithCursor(Long memberId, String afterCursor, int limit);
 
-    ProblemDto findProblemById(Long problemId);
+    ProblemResponseDto findProblemById(Long problemId);
 }
