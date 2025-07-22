@@ -27,3 +27,7 @@ jwt:
 logging:
   level:
     org.springframework.cloud.openfeign: DEBUG
+
+ai:
+  service:
+    url: ${AI_SERVICE_URL}

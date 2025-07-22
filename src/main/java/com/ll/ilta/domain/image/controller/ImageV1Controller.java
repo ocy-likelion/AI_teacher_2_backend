@@ -1,6 +1,7 @@
 package com.ll.ilta.domain.image.controller;
 
-import com.ll.ilta.domain.image.service.ImageUploadService;
+import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
+import com.ll.ilta.domain.problem.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 public class ImageV1Controller {
-    private final ImageUploadService imageUploadService;
+
+    private final ProblemService problemService;
 
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) { // TODO: ResponeDto 구현 필요
+    public ResponseEntity<ProblemResponseDto> uploadImage(@RequestParam("file") MultipartFile file) {
         Long userId = 8L; // TODO: 인증 구현 후 실제 로그인한 유저 ID로 변경
-        imageUploadService.uploadImage(userId, file);
-        return ResponseEntity.ok().build();
+        ProblemResponseDto response = problemService.createProblemWithImage(userId, file);
+        return ResponseEntity.ok(response);
     }
 }

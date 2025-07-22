@@ -27,4 +27,13 @@ public class ProblemConcept {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concept_id", nullable = false)
     private Concept concept;
+
+    private ProblemConcept(Problem problem, Concept concept) {
+        this.problem = problem;
+        this.concept = concept;
+    }
+
+    public static ProblemConcept of(Problem problem, Concept concept) {
+        return new ProblemConcept(problem, concept);
+    }
 }

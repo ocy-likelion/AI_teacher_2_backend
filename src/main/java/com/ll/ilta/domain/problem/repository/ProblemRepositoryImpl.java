@@ -7,6 +7,7 @@ import static com.ll.ilta.domain.problem.entity.QProblemConcept.problemConcept;
 import static com.ll.ilta.domain.problem.entity.QProblemResult.problemResult;
 import static com.ll.ilta.domain.image.entity.QImage.image;
 
+import com.ll.ilta.domain.problem.dto.ConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.global.common.dto.Cursor;
@@ -62,7 +63,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
 
         Map<Long, String> imageUrlMap = fetchImageUrls(List.of(problemId));
 
-        Map<Long, List<ProblemConceptDto>> conceptMap = fetchConceptsMap(List.of(problemId));
+        Map<Long, List<ConceptDto>> conceptMap = fetchConceptsMap(List.of(problemId));
 
         ProblemResponseDto p = problems.get(0);
 
@@ -76,7 +77,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
 
         Map<Long, String> imageUrlMap = fetchImageUrls(problemIds);
 
-        Map<Long, List<ProblemConceptDto>> conceptMap = fetchConceptsMap(problemIds);
+        Map<Long, List<ConceptDto>> conceptMap = fetchConceptsMap(problemIds);
 
         return problems.stream().map(p -> ProblemResponseDto.of(p.getId(), imageUrlMap.getOrDefault(p.getId(), null),
             conceptMap.getOrDefault(p.getId(), List.of()), p.getFavorite(), p.getOcrResult(), p.getLlmResult(),
@@ -90,14 +91,13 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             builder.and(problem.member.id.eq(memberId));
         }
 
-        // 이미지 URL은 여기서 안 불러오고 별도 메서드에서 조회
-        // DTO 생성자에 null 허용 필요
         return queryFactory.select(
-                Projections.constructor(ProblemResponseDto.class, problem.id, Expressions.constant("dummy"),
+                Projections.constructor(ProblemResponseDto.class, problem.id, Expressions.nullExpression(String.class),
                     favorite.id.isNotNull(), problem.result.ocrResult, problem.result.llmResult, problem.createdAt))
             .from(problem).leftJoin(problem.result, problemResult).leftJoin(favorite)
             .on(favorite.problem.id.eq(problem.id).and(memberId != null ? favorite.member.id.eq(memberId) : null))
             .where(builder).orderBy(problem.createdAt.desc(), problem.id.desc()).fetch();
+
     }
 
     private Map<Long, String> fetchImageUrls(List<Long> problemIds) {
@@ -107,12 +107,14 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
         return tuples.stream().collect(Collectors.toMap(t -> t.get(image.problem.id), t -> t.get(image.imageUrl)));
     }
 
-    private Map<Long, List<ProblemConceptDto>> fetchConceptsMap(List<Long> problemIds) {
+    private Map<Long, List<ConceptDto>> fetchConceptsMap(List<Long> problemIds) {
         List<ProblemConceptDto> concepts = queryFactory.select(
                 Projections.constructor(ProblemConceptDto.class, problemConcept.id, problemConcept.concept.name,
-                    problemConcept.problem.id)).from(problemConcept).join(problemConcept.concept, concept)
-            .where(problemConcept.problem.id.in(problemIds)).fetch();
+                    problemConcept.concept.description, problemConcept.problem.id)).from(problemConcept)
+            .join(problemConcept.concept, concept).where(problemConcept.problem.id.in(problemIds)).fetch();
 
-        return concepts.stream().collect(Collectors.groupingBy(ProblemConceptDto::getProblemId));
+        return concepts.stream().collect(Collectors.groupingBy(ProblemConceptDto::getProblemId,
+            Collectors.mapping(ProblemConceptDto::toConceptDto, Collectors.toList())));
     }
+
 }

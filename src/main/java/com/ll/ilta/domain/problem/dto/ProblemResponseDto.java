@@ -11,26 +11,14 @@ public class ProblemResponseDto {
 
     private final Long id;
     private final String imageUrl;
-    private final List<ProblemConceptDto> concepts;
+    private final List<ConceptDto> concepts;
     private final Boolean favorite;
     private final String ocrResult;
     private final String llmResult;
     private final LocalDateTime createdAt;
 
-    public ProblemResponseDto(Long id, String imageUrl, Boolean favorite, String ocrResult, String llmResult,
-        LocalDateTime createdAt) {
-        this.id = id;
-        this.imageUrl = imageUrl;
-        this.concepts = new ArrayList<>();
-        this.favorite = favorite;
-        this.ocrResult = ocrResult;
-        this.llmResult = llmResult;
-        this.createdAt = createdAt;
-    }
-
-    @Builder
-    private ProblemResponseDto(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite,
-        String ocrResult, String llmResult, LocalDateTime createdAt) {
+    private ProblemResponseDto(Long id, String imageUrl, List<ConceptDto> concepts, Boolean favorite, String ocrResult,
+        String llmResult, LocalDateTime createdAt) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.concepts = concepts != null ? concepts : new ArrayList<>();
@@ -40,9 +28,8 @@ public class ProblemResponseDto {
         this.createdAt = createdAt;
     }
 
-    public static ProblemResponseDto of(Long id, String imageUrl, List<ProblemConceptDto> concepts, Boolean favorite,
+    public static ProblemResponseDto of(Long id, String imageUrl, List<ConceptDto> concepts, Boolean favorite,
         String ocrResult, String llmResult, LocalDateTime createdAt) {
-        return ProblemResponseDto.builder().id(id).imageUrl(imageUrl).concepts(concepts != null ? concepts : List.of())
-            .favorite(favorite).ocrResult(ocrResult).llmResult(llmResult).createdAt(createdAt).build();
+        return new ProblemResponseDto(id, imageUrl, concepts, favorite, ocrResult, llmResult, createdAt);
     }
 }
