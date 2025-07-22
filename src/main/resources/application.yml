@@ -32,3 +32,6 @@ supabase:
   image-base-url: ${SUPABASE_IMAGE_BASE_URL}
   secret-key: ${SUPABASE_SECRET_KEY}
   bucket: "ilta-images"
+
+app:
+  allowed-origins: ${APP_ALLOWED_ORIGINS}
