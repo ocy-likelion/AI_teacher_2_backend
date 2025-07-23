@@ -55,7 +55,7 @@ public class ProblemService {
         SupabaseResponseDto uploadDto = supabaseUploader.upload(userId, file);
         String imageUrl = baseUrl + '/' + uploadDto.getKey();
 
-        Problem problem = problemRepository.save(Problem.of(member));
+        Problem problem = problemRepository.save(Problem.from(member));
 
         AiResponseDto aiResponseDto = aiFeignClient.sendImageToAiServer(file);
 
@@ -115,6 +115,8 @@ public class ProblemService {
     @Transactional
     public void deleteProblem(Long problemId) {
         favoriteRepository.deleteByProblemId(problemId);
+        imageRepository.deleteByProblemId(problemId);
+        problemResultRepository.deleteByProblemId(problemId);
         problemRepository.deleteById(problemId);
     }
 

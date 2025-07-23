@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProblemResultRepository extends JpaRepository<ProblemResult, Long> {
 
+    void deleteByProblemId(Long problemId);
 }
