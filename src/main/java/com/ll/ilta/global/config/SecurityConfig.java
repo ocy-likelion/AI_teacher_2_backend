@@ -5,6 +5,7 @@ import com.ll.ilta.global.security.JwtTokenProvider;
 import com.ll.ilta.global.security.MemberDetailsServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,23 +30,21 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberDetailsServiceImpl memberDetailsService;
 
+    @Value("${app.allowed-origins}")
+    private String allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(csrf -> csrf.disable())
             .formLogin(form -> form.disable()) // 기본 로그인 폼 비활성화
             .httpBasic(httpBasic -> httpBasic.disable()) // HTTP Basic 비활성화
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()
 //                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 //                .requestMatchers("/api/v1/member/login").permitAll() // 로그인은 모두 허용
 //                .requestMatchers("/api/v1/image/upload").permitAll() // TODO: JWT 검사 제외로 임시 방편, 추후 제거해야 함
 //                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+            ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -58,7 +57,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173", "https://ilta.onrender.com"));
+
+        List<String> originsList = List.of(allowedOrigins.split(","));
+        config.setAllowedOrigins(originsList);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
@@ -76,8 +77,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authBuilder.userDetailsService(memberDetailsService)
-            .passwordEncoder(passwordEncoder());
+        authBuilder.userDetailsService(memberDetailsService).passwordEncoder(passwordEncoder());
         return authBuilder.build();
     }
 }
