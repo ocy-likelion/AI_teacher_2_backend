@@ -1,5 +1,6 @@
 package com.ll.ilta.domain.problem.dto;
 
+import com.ll.ilta.domain.problem.entity.Concept;
 import lombok.Getter;
 
 @Getter
@@ -15,5 +16,9 @@ public class ConceptDto {
 
     public static ConceptDto of(String name, String description) {
         return new ConceptDto(name, description);
+    }
+
+    public Concept toEntity() {
+        return Concept.of(name, description);
     }
 }

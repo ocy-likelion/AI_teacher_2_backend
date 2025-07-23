@@ -66,8 +66,9 @@ public class ProblemService {
         List<ConceptDto> conceptDtos = aiResponseDto.getConceptTags().stream()
             .map(tag -> ConceptDto.of(tag.getName(), tag.getDescription())).toList();
 
-        List<Concept> savedConcepts = conceptDtos.stream().map(dto -> conceptRepository.findByName(dto.getName())
-            .orElseGet(() -> conceptRepository.save(Concept.fromDto(dto)))).collect(Collectors.toList());
+        List<Concept> savedConcepts = conceptDtos.stream().map(
+                dto -> conceptRepository.findByName(dto.getName()).orElseGet(() -> conceptRepository.save(dto.toEntity())))
+            .collect(Collectors.toList());
 
         List<ProblemConcept> problemConcepts = createProblemConcepts(problem, savedConcepts);
 

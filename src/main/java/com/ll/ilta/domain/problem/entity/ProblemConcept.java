@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,12 +29,13 @@ public class ProblemConcept {
     @JoinColumn(name = "concept_id", nullable = false)
     private Concept concept;
 
+    @Builder
     private ProblemConcept(Problem problem, Concept concept) {
         this.problem = problem;
         this.concept = concept;
     }
 
     public static ProblemConcept of(Problem problem, Concept concept) {
-        return new ProblemConcept(problem, concept);
+        return ProblemConcept.builder().problem(problem).concept(concept).build();
     }
 }
