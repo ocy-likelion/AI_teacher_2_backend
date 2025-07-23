@@ -117,6 +117,7 @@ public class ProblemService {
         favoriteRepository.deleteByProblemId(problemId);
         imageRepository.deleteByProblemId(problemId);
         problemResultRepository.deleteByProblemId(problemId);
+        problemConceptRepository.deleteByProblemId(problemId);
         problemRepository.deleteById(problemId);
     }
 
