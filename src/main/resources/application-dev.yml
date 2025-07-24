@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+kakao:
+  auth:
+    client: ${KAKAO_CLIENT_ID}
+    redirect: http://localhost:8080/api/v1/oauth
+
 custom:
   site:
     name: "ilta_dev"
