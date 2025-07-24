@@ -1,6 +1,7 @@
 package com.ll.ilta.domain.problem.entity;
 
-import com.ll.ilta.domain.member.v1.entity.Member;
+//import com.ll.ilta.domain.member.v1.entity.Member;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,7 +32,10 @@ public class Problem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+   // private Member member;
+
+    @OneToOne(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProblemResult result;
 
     @CreatedDate
     @Column(updatable = false)
@@ -39,9 +44,9 @@ public class Problem {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Problem from(Member member) {
-        Problem problem = new Problem();
-        problem.member = member;
-        return problem;
-    }
+//    public static Problem of(Member member) {
+//        Problem problem = new Problem();
+//        problem.member = member;
+//        return problem;
+//    }
 }

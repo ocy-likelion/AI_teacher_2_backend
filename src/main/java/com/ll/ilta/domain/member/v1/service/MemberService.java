@@ -1,19 +1,15 @@
-package com.ll.ilta.domain.member.v1.service;
-
-import com.ll.ilta.domain.member.v1.dto.MemberLoginRequestDto;
-import com.ll.ilta.domain.member.v1.dto.MemberRequestDto;
-import com.ll.ilta.domain.member.v1.dto.MemberResponseDto;
-import com.ll.ilta.domain.member.v1.entity.Member;
-
-public interface MemberService {
-
-    String login(MemberLoginRequestDto request);
-
-    void createChild(MemberRequestDto request);
-
-    MemberResponseDto updateChild(Long memberId, MemberRequestDto request);
-
-    MemberResponseDto getChild(Long memberId);
-
-    Member findById(Long memberId);
-}
+//package com.ll.ilta.domain.member.v1.service;
+//
+//import com.ll.ilta.domain.member.v1.dto.MemberRequestDto;
+//import com.ll.ilta.domain.member.v1.dto.MemberResponseDto;
+//
+//public interface MemberService {
+//
+////    String login(MemberLoginRequestDto request);
+//
+//    void createChild(MemberRequestDto request);
+//
+//    MemberResponseDto updateChild(Long memberId, MemberRequestDto request);
+//
+//    MemberResponseDto getChild(Long memberId);
+//}
