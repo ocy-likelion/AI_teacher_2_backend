@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.favorite.entity;
 
-//import com.ll.ilta.domain.member.v1.entity.Member;
+import com.ll.ilta.domain.member.v1.entity.MemberV1;
 import com.ll.ilta.domain.problem.entity.Problem;
 import com.ll.ilta.global.jpa.BaseTimeEntity;
 import jakarta.persistence.Entity;
@@ -31,7 +31,7 @@ public class Favorite extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    //private Member member;
+    private MemberV1 memberV1;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Favorite(Problem problem, Member member) {
