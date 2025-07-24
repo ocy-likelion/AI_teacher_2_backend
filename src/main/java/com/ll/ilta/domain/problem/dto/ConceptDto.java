@@ -8,19 +8,17 @@ public class ConceptDto {
 
     private final Long id;
     private final String name;
-    private final String description;
 
-    private ConceptDto(Long id, String name, String description) {
+    private ConceptDto(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.description = description;
     }
 
-    public static ConceptDto of(Long id, String name, String description) {
-        return new ConceptDto(id, name, description);
+    public static ConceptDto of(Long id, String name) {
+        return new ConceptDto(id, name);
     }
 
     public Concept toEntity() {
-        return Concept.of(id, name, description);
+        return Concept.of(id, name);
     }
 }

@@ -31,7 +31,7 @@ public class Concept {
         this.description = description;
     }
 
-    public static Concept of(Long id, String name, String description) {
-        return Concept.builder().id(id).name(name).description(description).build();
+    public static Concept of(Long id, String name) {
+        return Concept.builder().id(id).name(name).build();
     }
 }

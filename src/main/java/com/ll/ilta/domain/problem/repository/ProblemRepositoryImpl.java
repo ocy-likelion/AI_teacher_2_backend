@@ -113,7 +113,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             .fetch();
 
         return tuples.stream().collect(Collectors.groupingBy(t -> t.get(problemConcept.problem.id),
-            Collectors.mapping(t -> ConceptDto.of(t.get(concept.id), t.get(concept.name), t.get(concept.description)),
+            Collectors.mapping(t -> ConceptDto.of(t.get(concept.id), t.get(concept.name)),
                 Collectors.toList())));
     }
 }

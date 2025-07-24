@@ -64,7 +64,7 @@ public class ProblemService {
         problemResultRepository.save(result);
 
         List<ConceptDto> conceptDtos = aiResponseDto.getConceptTags().stream()
-            .map(tag -> ConceptDto.of(tag.getId(), tag.getName(), tag.getDescription())).toList();
+            .map(tag -> ConceptDto.of(tag.getId(), tag.getName())).toList();
 
         List<Concept> savedConcepts = conceptDtos.stream().map(
                 dto -> conceptRepository.findByName(dto.getName()).orElseGet(() -> conceptRepository.save(dto.toEntity())))
