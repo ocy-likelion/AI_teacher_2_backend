@@ -11,6 +11,4 @@ public class MemberV1LoginRequestDto {
 
     private String username;
     private String password;
-
-
 }
