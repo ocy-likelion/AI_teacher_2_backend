@@ -1,6 +1,5 @@
 package com.ll.ilta.domain.problem.entity;
 
-//import com.ll.ilta.domain.member.v1.entity.Member;
 import com.ll.ilta.domain.member.v1.entity.MemberV1;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
