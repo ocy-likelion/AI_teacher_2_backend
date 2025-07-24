@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.favorite.entity;
 
-import com.ll.ilta.domain.member.v1.entity.Member;
+//import com.ll.ilta.domain.member.v1.entity.Member;
 import com.ll.ilta.domain.problem.entity.Problem;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +34,7 @@ public class Favorite {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    //private Member member;
 
     @CreatedDate
     @Column(updatable = false)
