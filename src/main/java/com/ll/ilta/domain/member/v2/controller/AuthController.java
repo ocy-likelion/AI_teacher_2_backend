@@ -1,5 +1,6 @@
 package com.ll.ilta.domain.member.v2.controller;
 
+import com.ll.ilta.domain.member.v2.converter.MemberConverter;
 import com.ll.ilta.domain.member.v2.dto.Member;
 import com.ll.ilta.domain.member.v2.service.AuthService;
 import com.ll.ilta.global.payload.BaseResponse;
