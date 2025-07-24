@@ -28,8 +28,8 @@ public class JwtUtil {
     private final long accessTokenValidityMilliseconds;
 
     public JwtUtil(
-        @Value("${spring.jwt.secret}") final String secretKey,
-        @Value("${spring.jwt.access-token-time}") final long accessTokenValidityMilliseconds) {
+        @Value("${jwt.secret}") final String secretKey,
+        @Value("${jwt.expiration}")  final long accessTokenValidityMilliseconds) {
         this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.accessTokenValidityMilliseconds = accessTokenValidityMilliseconds;
     }

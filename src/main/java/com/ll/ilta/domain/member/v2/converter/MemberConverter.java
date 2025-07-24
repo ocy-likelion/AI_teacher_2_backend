@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MemberConverter {
 
-    public static Member tomember(MemberRequestDTO.JoinDTO joinDTO, PasswordEncoder passwordEncoder) {
+    public static Member toMember(MemberRequestDTO.JoinDTO joinDTO, PasswordEncoder passwordEncoder) {
         return Member.builder()
             .name(joinDTO.getName())
             .password(passwordEncoder.encode(joinDTO.getPassword()))
@@ -34,13 +34,13 @@ public class MemberConverter {
             .build();
     }
 
-    public static MemberResponseDTO.MemberPreviewListDTO toUserPreviewListDTO(List<User> userList) {
-        List<MemberResponseDTO.MemberPreviewDTO> userPreviewDTOList = userList.stream()
+    public static MemberResponseDTO.MemberPreviewListDTO toMemberPreviewListDTO(List<Member> memberList) {
+        List<MemberResponseDTO.MemberPreviewDTO> memberPreviewDTOList = memberList.stream()
             .map(MemberConverter::toMemberPreviewDTO)
             .toList();
 
         return MemberResponseDTO.MemberPreviewListDTO.builder()
-            .memberPreviewDTOList(userPreviewDTOList)
+            .memberPreviewDTOList(memberPreviewDTOList)
             .build();
     }
 }

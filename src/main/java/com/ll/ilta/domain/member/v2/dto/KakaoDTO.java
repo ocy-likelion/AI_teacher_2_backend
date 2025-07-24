@@ -1,10 +1,16 @@
 package com.ll.ilta.domain.member.v2.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class KakaoDTO {
+
     @Getter
+    @Setter
+    @NoArgsConstructor
     public static class OAuthToken {
+
         private String access_token;
         private String token_type;
         private String refresh_token;
@@ -14,19 +20,28 @@ public class KakaoDTO {
     }
 
     @Getter
+    @Setter
+    @NoArgsConstructor
     public static class KakaoProfile {
+
         private Long id;
         private String connected_at;
         private Properties properties;
         private KakaoAccount kakao_account;
 
         @Getter
-        public class Properties {
+        @Setter
+        @NoArgsConstructor
+        public static class Properties {
+
             private String nickname;
         }
 
         @Getter
-        public class KakaoAccount {
+        @Setter
+        @NoArgsConstructor
+        public static class KakaoAccount {
+
             private String email;
             private Boolean is_email_verified;
             private Boolean has_email;
@@ -36,7 +51,10 @@ public class KakaoDTO {
             private Profile profile;
 
             @Getter
-            public class Profile {
+            @Setter
+            @NoArgsConstructor
+            public static class Profile {
+
                 private String nickname;
                 private Boolean is_default_nickname;
             }
