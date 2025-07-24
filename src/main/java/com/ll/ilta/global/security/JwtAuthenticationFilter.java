@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,47 +19,39 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberDetailsServiceImpl memberDetailsService;
+    //private final MemberDetailsServiceImpl memberDetailsService;
+
+    private static final List<String> ALLOW_URLS = List.of(
+        "/auth/login/kakao",
+        "/api/v1/member/register",
+        "/api/v1/image/upload"  // TODO: 이미지 업로드 JWT 포함 후 삭제 예정
+    );
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-        HttpServletResponse response,
-        FilterChain filterChain) throws ServletException, IOException {
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
         String path = request.getRequestURI();
-        // 로그인 경로 및 인증 안 필요한 경로는 토큰 검사 안 함
-        if (path.equals("/api/v1/member/login")
-            || path.equals("/api/v1/member/register")
-            || path.equals("/api/v1/image/upload")) { // TODO: 이미지 업로드 JWT 포함 후 삭제 예정
+
+        if (ALLOW_URLS.stream().anyMatch(path::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = resolveToken(request);
 
-        if (token != null) {
-            log.info("JWT token found in header: {}", token);
-            if (jwtTokenProvider.validateToken(token)) {
-                String username = jwtTokenProvider.getUsername(token);
-                log.info("Token valid. Username: {}", username);
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            String username = jwtTokenProvider.getUsername(token);
 
-                UserDetails userDetails = memberDetailsService.loadUserByUsername(username);
-
-                UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                log.warn("Invalid JWT token");
-            }
-        } else {
-            log.info("No JWT token found in request");
+            // 인증은 나중에 구현
+//            UserDetails userDetails = memberDetailsService.loadUserByUsername(username);
+//            UsernamePasswordAuthenticationToken authentication =
+//                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
     }
-
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
