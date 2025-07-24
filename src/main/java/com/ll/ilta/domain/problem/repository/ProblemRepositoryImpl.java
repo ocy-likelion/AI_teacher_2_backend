@@ -31,7 +31,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
 
     @Override
     public List<ProblemResponseDto> findProblemWithCursor(Long memberId, String afterCursor, int limit) {
-        BooleanBuilder builder = new BooleanBuilder(problem.member.id.eq(memberId));
+        BooleanBuilder builder = new BooleanBuilder(problem.memberV1.id.eq(memberId));
         if (afterCursor != null) {
             Cursor decoded = CursorUtil.decodeCursor(afterCursor);
             builder.and(problem.createdAt.lt(decoded.createdAt())
@@ -82,14 +82,14 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
     private List<ProblemResponseDto> fetchProblems(Long memberId, List<Long> problemIds) {
         BooleanBuilder builder = new BooleanBuilder(problem.id.in(problemIds));
         if (memberId != null) {
-            builder.and(problem.member.id.eq(memberId));
+            builder.and(problem.memberV1.id.eq(memberId));
         }
 
         return queryFactory.select(
                 Projections.constructor(ProblemResponseDto.class, problem.id, Expressions.nullExpression(String.class),
                     favorite.id.isNotNull(), Expressions.constant(""), Expressions.constant(""), problem.createdAt))
             .from(problem).leftJoin(favorite)
-            .on(favorite.problem.id.eq(problem.id).and(memberId != null ? favorite.member.id.eq(memberId) : null))
+            .on(favorite.problem.id.eq(problem.id).and(memberId != null ? favorite.memberV1.id.eq(memberId) : null))
             .where(builder).orderBy(problem.createdAt.desc(), problem.id.desc()).fetch();
     }
 

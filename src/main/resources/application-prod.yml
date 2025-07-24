@@ -5,7 +5,7 @@ server:
 kakao:
   auth:
     client: ${KAKAO_CLIENT_ID}
-    redirect: https://ilta-api.onrender.com/api/v1/oauth
+    redirect: ${KAKAO_REDIRECT_URL}
 
 custom:
   site:

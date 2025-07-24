@@ -1,0 +1,17 @@
+package com.ll.ilta.domain.member.v2.converter;
+
+import com.ll.ilta.domain.member.v2.dto.Member;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+public class AuthConverter {
+
+    public static Member toMember(String email, String name, String password, PasswordEncoder passwordEncoder) {
+        return Member.builder()
+            .email(email)
+            .role("ROLE_USER")
+            .password(passwordEncoder.encode(password))
+            .name(name)
+            .build();
+    }
+
+}

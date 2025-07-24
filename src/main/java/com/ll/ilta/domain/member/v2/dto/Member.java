@@ -7,12 +7,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.Table;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,4 +34,15 @@ public class Member extends BaseEntity {
     private String password;
 
     private String role;
+
+    private Integer grade;
+
+    public void update(String name, Integer grade) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (grade != null) {
+            this.grade = grade;
+        }
+    }
 }
