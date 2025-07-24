@@ -55,21 +55,10 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
 
     @Override
     public ProblemResponseDto findProblemById(Long problemId) {
-        List<ProblemResponseDto> problems = fetchProblems(null, List.of(problemId));
+        List<Long> problemIds = List.of(problemId);
+        List<ProblemResponseDto> problems = buildProblemDtos(null, problemIds);
 
-        if (problems.isEmpty()) {
-            return null;
-        }
-
-        Map<Long, String> imageUrlMap = fetchImageUrls(List.of(problemId));
-
-        Map<Long, List<ConceptDto>> conceptMap = fetchConceptsMap(List.of(problemId));
-
-        ProblemResponseDto p = problems.get(0);
-
-        return ProblemResponseDto.of(p.getId(), imageUrlMap.getOrDefault(p.getId(), null),
-            conceptMap.getOrDefault(p.getId(), List.of()), p.getFavorite(), p.getOcrResult(), p.getLlmResult(),
-            p.getCreatedAt());
+        return problems.isEmpty() ? null : problems.get(0);
     }
 
     private List<ProblemResponseDto> buildProblemDtos(Long memberId, List<Long> problemIds) {
@@ -119,12 +108,12 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
     }
 
     private Map<Long, List<ConceptDto>> fetchConceptsMap(List<Long> problemIds) {
-        List<Tuple> tuples = queryFactory.select(problemConcept.problem.id, concept.name, concept.description)
+        List<Tuple> tuples = queryFactory.select(problemConcept.problem.id, concept.id, concept.name, concept.description)
             .from(problemConcept).join(problemConcept.concept, concept).where(problemConcept.problem.id.in(problemIds))
             .fetch();
 
         return tuples.stream().collect(Collectors.groupingBy(t -> t.get(problemConcept.problem.id),
-            Collectors.mapping(t -> ConceptDto.of(t.get(concept.name), t.get(concept.description)),
+            Collectors.mapping(t -> ConceptDto.of(t.get(concept.id), t.get(concept.name)),
                 Collectors.toList())));
     }
 }

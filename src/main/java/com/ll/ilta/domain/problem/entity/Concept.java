@@ -25,12 +25,13 @@ public class Concept {
     private String description;
 
     @Builder
-    private Concept(String name, String description) {
+    private Concept(Long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public static Concept of(String name, String description) {
-        return Concept.builder().name(name).description(description).build();
+    public static Concept of(Long id, String name) {
+        return Concept.builder().id(id).name(name).build();
     }
 }
