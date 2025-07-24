@@ -52,7 +52,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider /*, memberDetailsService */);
+        return new JwtAuthenticationFilter(jwtTokenProvider, memberV1DetailsService);
     }
 
     @Bean
