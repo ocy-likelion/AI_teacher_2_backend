@@ -7,8 +7,8 @@ import com.ll.ilta.domain.image.dto.SupabaseResponseDto;
 import com.ll.ilta.domain.image.entity.Image;
 import com.ll.ilta.domain.image.repository.ImageRepository;
 import com.ll.ilta.domain.image.service.SupabaseUploader;
-import com.ll.ilta.domain.member.v1.entity.Member;
-import com.ll.ilta.domain.member.v1.service.MemberService;
+import com.ll.ilta.domain.member.v1.entity.MemberV1;
+import com.ll.ilta.domain.member.v1.service.MemberV1Service;
 import com.ll.ilta.domain.problem.dto.ConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.entity.Problem;
@@ -35,7 +35,7 @@ public class ProblemService {
 
     private static final String PROBLEMS_LIST_URL = "/api/v1/problem/list";
 
-    private final MemberService memberService;
+    private final MemberV1Service memberv1Service;
     private final SupabaseUploader supabaseUploader;
     private final AiFeignClient aiFeignClient;
     private final ProblemRepository problemRepository;
@@ -50,12 +50,12 @@ public class ProblemService {
 
     @Transactional
     public ProblemResponseDto createProblemWithImage(Long userId, MultipartFile file) {
-        Member member = memberService.findById(userId);
+        MemberV1 memberV1 = memberv1Service.findById(userId);
 
         SupabaseResponseDto uploadDto = supabaseUploader.upload(userId, file);
         String imageUrl = baseUrl + '/' + uploadDto.getKey();
 
-        Problem problem = problemRepository.save(Problem.from(member));
+        Problem problem = problemRepository.save(Problem.from(memberV1));
 
         AiResponseDto aiResponseDto = aiFeignClient.sendImageToAiServer(file);
 
