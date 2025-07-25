@@ -4,14 +4,15 @@ import com.ll.ilta.domain.favorite.dto.FavoriteResponseDto;
 import com.ll.ilta.domain.favorite.dto.FavoriteToggleResponseDto;
 import com.ll.ilta.domain.favorite.entity.Favorite;
 import com.ll.ilta.domain.favorite.repository.FavoriteRepository;
-import com.ll.ilta.domain.member.v1.entity.Member;
-import com.ll.ilta.domain.member.v1.repository.MemberRepository;
+import com.ll.ilta.domain.member.v2.entity.Member;
+import com.ll.ilta.domain.member.v2.repository.MemberRepository;
 import com.ll.ilta.domain.problem.entity.Problem;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import com.ll.ilta.global.common.service.CursorUtil;
-import com.ll.ilta.global.exception.CustomException;
-import com.ll.ilta.global.exception.ErrorCode;
+import com.ll.ilta.global.payload.code.status.ErrorStatus;
+import com.ll.ilta.global.payload.exception.handler.AuthHandler;
+import com.ll.ilta.global.payload.exception.handler.ProblemHandler;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -65,9 +66,9 @@ public class FavoriteService {
             return new FavoriteToggleResponseDto(false);
         } else {
             Problem problem = problemRepository.findById(problemId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PROBLEM));
+                .orElseThrow(() -> new ProblemHandler(ErrorStatus.NOT_FOUND_PROBLEM));
             Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new AuthHandler(ErrorStatus.NOT_FOUND_USER));
 
             favoriteRepository.save(Favorite.of(problem, member));
             return new FavoriteToggleResponseDto(true);

@@ -5,11 +5,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.service.ProblemService;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
+import com.ll.ilta.global.security.v2.member.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +28,11 @@ public class ProblemV1Controller {
 
     @Operation(summary = "해설 목록 조회", description = "커서 기반 페이징 지원")
     @GetMapping("/list")
-    public ResponseEntity<CursorPaginatedResponseDto<ProblemResponseDto>> getProblemList(@RequestParam Long memberId,
+    public ResponseEntity<CursorPaginatedResponseDto<ProblemResponseDto>> getProblemList(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         @RequestParam(defaultValue = "10") int limit,
         @RequestParam(name = "after_cursor", required = false) String afterCursor) {
+        Long memberId = principalDetails.getMemberId();  // ID만 필요하면 이렇게
         CursorPaginatedResponseDto<ProblemResponseDto> response = problemService.getProblemList(memberId, limit,
             afterCursor);
         return ResponseEntity.ok(response);

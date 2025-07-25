@@ -1,11 +1,11 @@
 package com.ll.ilta.domain.problem.repository;
 
-import static com.ll.ilta.domain.favorite.entity.QFavorite.favorite;
 import static com.ll.ilta.domain.concept.entity.QConcept.concept;
+import static com.ll.ilta.domain.favorite.entity.QFavorite.favorite;
+import static com.ll.ilta.domain.image.entity.QImage.image;
 import static com.ll.ilta.domain.problem.entity.QProblem.problem;
 import static com.ll.ilta.domain.problem.entity.QProblemConcept.problemConcept;
 import static com.ll.ilta.domain.problem.entity.QProblemResult.problemResult;
-import static com.ll.ilta.domain.image.entity.QImage.image;
 
 import com.ll.ilta.domain.problem.dto.ConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
@@ -108,7 +108,8 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
     }
 
     private Map<Long, List<ConceptDto>> fetchConceptsMap(List<Long> problemIds) {
-        List<Tuple> tuples = queryFactory.select(problemConcept.problem.id, concept.id, concept.name, concept.description)
+        List<Tuple> tuples = queryFactory.select(problemConcept.problem.id, concept.id, concept.name,
+                concept.description)
             .from(problemConcept).join(problemConcept.concept, concept).where(problemConcept.problem.id.in(problemIds))
             .fetch();
 

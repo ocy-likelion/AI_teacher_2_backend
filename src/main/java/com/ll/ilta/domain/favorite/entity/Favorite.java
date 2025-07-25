@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.favorite.entity;
 
-import com.ll.ilta.domain.member.v1.entity.Member;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import com.ll.ilta.domain.problem.entity.Problem;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,6 +24,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Favorite {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
