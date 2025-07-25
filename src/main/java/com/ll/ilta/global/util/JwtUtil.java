@@ -3,12 +3,12 @@ package com.ll.ilta.global.util;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
 import com.ll.ilta.global.payload.exception.handler.AuthHandler;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ public class JwtUtil {
 
     public JwtUtil(
         @Value("${jwt.secret}") final String secretKey,
-        @Value("${jwt.expiration}")  final long accessTokenValidityMilliseconds) {
+        @Value("${jwt.expiration}") final long accessTokenValidityMilliseconds) {
         this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.accessTokenValidityMilliseconds = accessTokenValidityMilliseconds;
     }
@@ -40,10 +40,11 @@ public class JwtUtil {
         String authorization = request.getHeader("Authorization");
 
         if (authorization == null || !authorization.startsWith("Bearer ")) {
-            log.warn("[*] No Token in req");
+            log.warn("[JWT] No Token found in Authorization header");
             throw new AuthHandler(ErrorStatus.TOKEN_NOT_FOUND);
         }
-        log.info("[*] Token exists");
+        log.info("[JWT] Authorization 헤더에서 추출된 토큰 앞 10자리: {}",
+            authorization.substring(7, Math.min(17, authorization.length())));
         return authorization.split(" ")[1];
     }
 
@@ -68,23 +69,32 @@ public class JwtUtil {
     }
 
     public String getEmail(String token) {
-        return getClaims(token).getBody().get("email", String.class);
+
+        //return getClaims(token).getBody().get("email", String.class);
+        String email = getClaims(token).getBody().get("email", String.class);
+        log.info("[JWT] 토큰에서 추출한 이메일: {}", email);
+        return email;
     }
 
     public boolean isTokenValid(String token) {
         try {
             Jws<Claims> claims = getClaims(token);
             Date expiredDate = claims.getBody().getExpiration();
-            Date now = new Date();
-            return expiredDate.after(now);
+            String email = claims.getBody().get("email", String.class);
+            log.info("[JWT] 토큰 유효함 ✅ | 이메일: {}, 만료시간: {}", email, expiredDate);
+            //Date now = new Date();
+            return expiredDate.after(new Date()); //now
         } catch (ExpiredJwtException e) {
+            log.warn("[JWT] 만료된 토큰 ❌ | 앞 10자리: {} | 에러: {}", token.substring(0, Math.min(10, token.length())), e.getMessage());
             log.info("[*] _AUTH_EXPIRE_TOKEN");
+
             throw new AuthHandler(ErrorStatus.AUTH_EXPIRE_TOKEN);
         } catch (SignatureException
                  | SecurityException
                  | IllegalArgumentException
                  | MalformedJwtException
                  | UnsupportedJwtException e) {
+            log.warn("[JWT] 유효하지 않은 토큰 ❌ | 앞 10자리: {} | 에러: {}", token.substring(0, Math.min(10, token.length())), e.getMessage());
             log.info("[*] AUTH_INVALID_TOKEN");
             throw new AuthHandler(ErrorStatus.AUTH_INVALID_TOKEN);
         }

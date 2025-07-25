@@ -35,7 +35,7 @@ public class SecurityConfigV1 {
     @Order(1)
     @Bean(name = "securityFilterChainV1")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(csrf -> csrf.disable())
+        http.cors(cors -> cors.configurationSource(corsConfigurationSourceV1())).csrf(csrf -> csrf.disable())
             .securityMatcher("/api/v1/**")   // v1 경로만 처리
             .formLogin(form -> form.disable()) // 기본 로그인 폼 비활성화
             .httpBasic(httpBasic -> httpBasic.disable()) // HTTP Basic 비활성화
@@ -56,7 +56,7 @@ public class SecurityConfigV1 {
     }
 
     @Bean("corsConfigurationSourceV1")
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSourceV1() {
         CorsConfiguration config = new CorsConfiguration();
 
         List<String> originsList = List.of(allowedOrigins.split(","));
@@ -71,14 +71,14 @@ public class SecurityConfigV1 {
     }
 
     @Bean("passwordEncoderV1")
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoderV1() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean("authenticationManagerV1")
     public AuthenticationManager authenticationManagerV1(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authBuilder.userDetailsService(memberV1DetailsService).passwordEncoder(passwordEncoder());
+        authBuilder.userDetailsService(memberV1DetailsService).passwordEncoder(passwordEncoderV1());
         return authBuilder.build();
     }
 }

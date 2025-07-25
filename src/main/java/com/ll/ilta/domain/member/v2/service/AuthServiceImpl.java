@@ -9,9 +9,10 @@ import com.ll.ilta.global.util.KakaoUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -21,8 +22,10 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
+
     @Override
     public Member oAuthLogin(String accessCode, HttpServletResponse httpServletResponse) {
+        log.info("oAuthLogin called with code={}", accessCode);
         KakaoDTO.OAuthToken oAuthToken = kakaoUtil.requestToken(accessCode);
         KakaoDTO.KakaoProfile kakaoProfile = kakaoUtil.requestMemberProfile(oAuthToken);
 
@@ -30,7 +33,8 @@ public class AuthServiceImpl implements AuthService {
 
         if (queryMember.isPresent()) {
             Member member = queryMember.get();
-            httpServletResponse.setHeader("Authorization", jwtUtil.createAccessToken(member.getEmail(), "ROLE_USER"));
+            String token = jwtUtil.createAccessToken(member.getEmail(), "ROLE_USER");
+            httpServletResponse.setHeader("Authorization", "Bearer " + token);
             return member;
         } else {
             Member member = AuthConverter.toMember(kakaoProfile.getKakao_account().getEmail(),
@@ -38,8 +42,8 @@ public class AuthServiceImpl implements AuthService {
                 "1234",
                 passwordEncoder);
             memberRepository.save(member);
-            httpServletResponse.setHeader("Authorization",
-                jwtUtil.createAccessToken(member.getEmail(), String.valueOf(member.getRole())));
+            String token = jwtUtil.createAccessToken(member.getEmail(), member.getRole());
+            httpServletResponse.setHeader("Authorization",  "Bearer " + token);
             return member;
         }
     }

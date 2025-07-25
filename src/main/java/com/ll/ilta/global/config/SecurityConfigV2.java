@@ -61,6 +61,7 @@ public class SecurityConfigV2 {
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -93,6 +94,7 @@ public class SecurityConfigV2 {
         // 경로별 인가
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
             .requestMatchers(HttpMethod.POST, "/api/v2/members").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v2/oauth").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/v2/members/{memberId}/posts").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.PATCH, "/api/v2/posts/{postId}").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.POST, "/api/v2/members/{memberId}/posts/{postId}/replies").hasAnyRole("ADMIN")

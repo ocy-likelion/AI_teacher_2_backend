@@ -37,9 +37,4 @@ public class AuthController {
         return BaseResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
     }
 
-    @GetMapping("/api/v1/oauth")
-    public void kakaoLoginRedirect(@RequestParam("code") String accessCode,
-        HttpServletResponse response) throws IOException {
-        response.sendRedirect("/api/v2/oauth?code=" + accessCode);
-    }
 }
