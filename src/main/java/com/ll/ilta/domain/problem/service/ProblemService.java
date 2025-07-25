@@ -1,5 +1,7 @@
 package com.ll.ilta.domain.problem.service;
 
+import com.ll.ilta.domain.favorite.dto.FavoriteResponseDto;
+import com.ll.ilta.domain.favorite.repository.FavoriteRepository;
 import com.ll.ilta.domain.image.client.AiFeignClient;
 import com.ll.ilta.domain.image.dto.AiResponseDto;
 import com.ll.ilta.domain.image.dto.SupabaseResponseDto;
@@ -14,8 +16,7 @@ import com.ll.ilta.domain.concept.entity.Concept;
 import com.ll.ilta.domain.problem.entity.Problem;
 import com.ll.ilta.domain.problem.entity.ProblemConcept;
 import com.ll.ilta.domain.problem.entity.ProblemResult;
-import com.ll.ilta.domain.concept.repository.ConceptRepository;
-import com.ll.ilta.domain.problem.repository.FavoriteRepository;
+import com.ll.ilta.domain.problem.repository.ConceptRepository;
 import com.ll.ilta.domain.problem.repository.ProblemConceptRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
 import com.ll.ilta.domain.problem.repository.ProblemResultRepository;
@@ -92,14 +93,15 @@ public class ProblemService {
         }
 
         boolean hasNextPage = problems.size() > limit;
-        if (hasNextPage) {
-            problems = problems.subList(0, limit);
-        }
 
         String nextCursor = null;
         if (hasNextPage) {
-            ProblemResponseDto lastProblem = problems.get(problems.size() - 1);
-            nextCursor = CursorUtil.encodeCursor(lastProblem.getId(), lastProblem.getCreatedAt());
+            ProblemResponseDto lastItem = problems.get(limit - 1); // 현재 페이지 마지막
+            nextCursor = CursorUtil.encodeCursor(lastItem.getId(), lastItem.getCreatedAt());
+        }
+
+        if (hasNextPage) {
+            problems = problems.subList(0, limit);
         }
 
         String selfUrl = buildSelfUrl(limit, afterCursor);

@@ -7,6 +7,8 @@ public enum ErrorCode {
 
     NOT_FOUND_MEMBER(404, "NOT_FOUND_MEMBER", "해당 자녀가 없습니다."),
 
+    NOT_FOUND_PROBLEM(404, "NOT_FOUND_PROBLEM", "해당 문제가 없습니다."),
+
     INVALID_PASSWORD(401, "INVALID_PASSWORD", "비밀번호가 틀렸습니다.");
 
     private final int status;

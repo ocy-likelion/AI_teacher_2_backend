@@ -39,4 +39,11 @@ public class Favorite {
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    public static Favorite of(Problem problem, Member member) {
+        Favorite favorite = new Favorite();
+        favorite.problem = problem;
+        favorite.member = member;
+        return favorite;
+    }
 }
