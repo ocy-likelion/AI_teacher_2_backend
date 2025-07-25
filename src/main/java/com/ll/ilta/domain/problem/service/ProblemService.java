@@ -1,6 +1,5 @@
 package com.ll.ilta.domain.problem.service;
 
-import com.ll.ilta.domain.favorite.dto.FavoriteResponseDto;
 import com.ll.ilta.domain.favorite.repository.FavoriteRepository;
 import com.ll.ilta.domain.image.client.AiFeignClient;
 import com.ll.ilta.domain.image.dto.AiResponseDto;
@@ -12,14 +11,14 @@ import com.ll.ilta.domain.member.v1.entity.Member;
 import com.ll.ilta.domain.member.v1.service.MemberService;
 import com.ll.ilta.domain.problem.dto.ConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
-import com.ll.ilta.domain.problem.entity.Concept;
 import com.ll.ilta.domain.problem.entity.Problem;
 import com.ll.ilta.domain.problem.entity.ProblemConcept;
 import com.ll.ilta.domain.problem.entity.ProblemResult;
-import com.ll.ilta.domain.problem.repository.ConceptRepository;
 import com.ll.ilta.domain.problem.repository.ProblemConceptRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
 import com.ll.ilta.domain.problem.repository.ProblemResultRepository;
+import com.ll.ilta.domain.concept.entity.Concept;
+import com.ll.ilta.domain.concept.repository.ConceptRepository;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import com.ll.ilta.global.common.service.CursorUtil;
 import java.util.List;

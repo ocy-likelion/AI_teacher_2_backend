@@ -1,7 +1,7 @@
 package com.ll.ilta.domain.problem.repository;
 
 import static com.ll.ilta.domain.favorite.entity.QFavorite.favorite;
-import static com.ll.ilta.domain.problem.entity.QConcept.concept;
+import static com.ll.ilta.domain.concept.entity.QConcept.concept;
 import static com.ll.ilta.domain.problem.entity.QProblem.problem;
 import static com.ll.ilta.domain.problem.entity.QProblemConcept.problemConcept;
 import static com.ll.ilta.domain.problem.entity.QProblemResult.problemResult;

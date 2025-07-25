@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.problem.dto;
 
-import com.ll.ilta.domain.problem.entity.Concept;
+import com.ll.ilta.domain.concept.entity.Concept;
 import lombok.Getter;
 
 @Getter

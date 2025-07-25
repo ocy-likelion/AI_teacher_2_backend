@@ -1,4 +1,4 @@
-package com.ll.ilta.domain.problem.entity;
+package com.ll.ilta.domain.concept.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
