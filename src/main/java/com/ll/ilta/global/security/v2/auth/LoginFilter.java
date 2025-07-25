@@ -1,15 +1,15 @@
-package com.ll.ilta.global.security.filter;
+package com.ll.ilta.global.security.v2.auth;
 // 스프링 시큐리티에 UsernamePasswordAuthenticationFilter 라는게 있음
 // /login 요청해서 username,password 전송하면 (POST)
 // UsernamePasswordAuthenticationFilter 필터가 작동함
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.ilta.domain.member.v2.dto.request.MemberRequestDTO;
-import com.ll.ilta.global.payload.BaseResponse;
+import com.ll.ilta.global.payload.response.BaseResponse;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
 import com.ll.ilta.global.payload.exception.handler.AuthHandler;
-import com.ll.ilta.global.security.memberdetails.V2.PrincipalDetails;
-import com.ll.ilta.global.util.JwtUtil;
+import com.ll.ilta.global.security.v2.member.PrincipalDetails;
+import com.ll.ilta.global.security.v2.jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

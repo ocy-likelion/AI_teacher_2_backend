@@ -1,10 +1,9 @@
-package com.ll.ilta.global.security.filter;
+package com.ll.ilta.global.security.v2.jwt;
 
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
 import com.ll.ilta.global.payload.exception.handler.AuthHandler;
-import com.ll.ilta.global.security.constant.SecurityConstants;
-import com.ll.ilta.global.security.memberdetails.V2.PrincipalDetailsService;
-import com.ll.ilta.global.util.JwtUtil;
+import com.ll.ilta.global.security.common.SecurityConstants;
+import com.ll.ilta.global.security.v2.member.PrincipalDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

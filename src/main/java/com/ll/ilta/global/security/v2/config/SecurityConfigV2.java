@@ -1,13 +1,13 @@
-package com.ll.ilta.global.config;
+package com.ll.ilta.global.security.v2.config;
 
-import com.ll.ilta.global.security.constant.SecurityConstants;
-import com.ll.ilta.global.security.filter.CustomDaoAuthenticationProvider;
-import com.ll.ilta.global.security.filter.JwtAccessDeniedHandler;
-import com.ll.ilta.global.security.filter.JwtExceptionFilter;
-import com.ll.ilta.global.security.filter.JwtFilter;
-import com.ll.ilta.global.security.filter.LoginFilter;
-import com.ll.ilta.global.security.memberdetails.V2.PrincipalDetailsService;
-import com.ll.ilta.global.util.JwtUtil;
+import com.ll.ilta.global.security.common.JwtAccessDeniedHandler;
+import com.ll.ilta.global.security.common.JwtExceptionFilter;
+import com.ll.ilta.global.security.common.SecurityConstants;
+import com.ll.ilta.global.security.v2.auth.CustomDaoAuthenticationProvider;
+import com.ll.ilta.global.security.v2.auth.LoginFilter;
+import com.ll.ilta.global.security.v2.jwt.JwtFilter;
+import com.ll.ilta.global.security.v2.jwt.JwtUtil;
+import com.ll.ilta.global.security.v2.member.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -93,12 +93,28 @@ public class SecurityConfigV2 {
 
         // 경로별 인가
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+            // ✅ 공용 허용 경로 (비로그인)
+            .requestMatchers(SecurityConstants.allowedUrls).permitAll()
             .requestMatchers(HttpMethod.POST, "/api/v2/members").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v2/oauth").permitAll()
+
+            // ✅ 로그인 사용자 (USER, ADMIN)
+            .requestMatchers(HttpMethod.GET, "/api/v1/concept").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.GET, "/api/v1/favorite/list").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.POST, "/api/v1/favorite").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.POST, "/api/v1/image/upload").hasAnyRole("USER", "ADMIN")
+
+            .requestMatchers(HttpMethod.PATCH, "/api/v2/members/me").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/v2/members/me").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.GET, "/api/v2/members/me/child-info").hasAnyRole("USER", "ADMIN")
+
             .requestMatchers(HttpMethod.POST, "/api/v2/members/{memberId}/posts").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.PATCH, "/api/v2/posts/{postId}").hasAnyRole("USER", "ADMIN")
-            .requestMatchers(HttpMethod.POST, "/api/v2/members/{memberId}/posts/{postId}/replies").hasAnyRole("ADMIN")
-            .requestMatchers(SecurityConstants.allowedUrls).permitAll()
+
+            // ✅ 관리자 전용
+            .requestMatchers(HttpMethod.GET, "/api/v2/members").hasRole("ADMIN")
+
+            // ✅ 나머지는 인증 필요
             .anyRequest().authenticated()
         );
 

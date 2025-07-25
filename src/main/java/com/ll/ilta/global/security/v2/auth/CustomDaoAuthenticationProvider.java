@@ -1,4 +1,4 @@
-package com.ll.ilta.global.security.filter;
+package com.ll.ilta.global.security.v2.auth;
 
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 

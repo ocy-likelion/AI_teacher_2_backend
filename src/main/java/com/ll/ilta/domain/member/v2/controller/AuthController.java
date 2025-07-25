@@ -1,13 +1,12 @@
 package com.ll.ilta.domain.member.v2.controller;
 
 import com.ll.ilta.domain.member.v2.converter.MemberConverter;
-import com.ll.ilta.domain.member.v2.dto.Member;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import com.ll.ilta.domain.member.v2.dto.request.MemberRequestDTO;
 import com.ll.ilta.domain.member.v2.dto.response.MemberResponseDTO;
 import com.ll.ilta.domain.member.v2.service.AuthService;
-import com.ll.ilta.global.payload.BaseResponse;
+import com.ll.ilta.global.payload.response.BaseResponse;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

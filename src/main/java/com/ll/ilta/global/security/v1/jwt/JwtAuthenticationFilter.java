@@ -1,6 +1,6 @@
-package com.ll.ilta.global.security;
+package com.ll.ilta.global.security.v1.jwt;
 
-import com.ll.ilta.global.security.memberdetails.V1.MemberV1DetailsServiceImpl;
+import com.ll.ilta.global.security.v1.member.MemberV1DetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,6 +1,6 @@
 package com.ll.ilta.global;
 
-import com.ll.ilta.global.payload.BaseResponse;
+import com.ll.ilta.global.payload.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

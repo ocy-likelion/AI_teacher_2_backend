@@ -1,4 +1,4 @@
-package com.ll.ilta.global.payload;
+package com.ll.ilta.global.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

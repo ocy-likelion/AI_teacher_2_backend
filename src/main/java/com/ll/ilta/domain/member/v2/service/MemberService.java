@@ -1,20 +1,20 @@
 package com.ll.ilta.domain.member.v2.service;
 
-import com.ll.ilta.domain.member.v2.dto.Member;
 import com.ll.ilta.domain.member.v2.dto.request.MemberRequestDTO;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import java.util.List;
 
 public interface MemberService {
 
-    boolean hasChildInfo(Long memberId);
-
     Member createMember(MemberRequestDTO.JoinDTO joinDTO);
 
-    Member readMember(Long memberId);
+    Member readMember(Long memberId); // 로그인 사용자 기준
 
-    List<Member> readMembers();
+    List<Member> readAllMember();
 
-    void deleteMember(Long memberId);
+    boolean checkChildInfo(Long memberId); // 로그인 사용자 기준
 
-    Member updateMember(MemberRequestDTO.UpdateMemberDTO updateMemberDTO, Long memberId);
+    void deleteMyInfo(Long memberId); // 로그인 사용자 기준
+
+    Member updateMyInfo(MemberRequestDTO.UpdateMemberDTO updateMemberDTO, Long memberId); // 로그인 사용자 기준
 }

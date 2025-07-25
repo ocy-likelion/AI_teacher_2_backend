@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.problem.entity;
 
-import com.ll.ilta.domain.member.v1.entity.MemberV1;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import com.ll.ilta.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,18 +27,18 @@ public class Problem extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private MemberV1 memberV1;
+    private Member Member;
 
     @Column(nullable = true)
     private LocalDateTime activatedAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Problem(MemberV1 member) {
-        this.memberV1 = memberV1;
+    private Problem(Member member) {
+        this.Member = Member;
     }
 
-    public static Problem from(MemberV1 memberV1) {
-        return Problem.builder().memberV1(memberV1).build();
+    public static Problem from(Member Member) {
+        return Problem.builder().Member(Member).build();
     }
 
     public void activate() {

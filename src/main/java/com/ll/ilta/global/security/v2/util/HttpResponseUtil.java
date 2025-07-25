@@ -1,7 +1,7 @@
-package com.ll.ilta.global.util;
+package com.ll.ilta.global.security.v2.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ll.ilta.global.payload.BaseResponse;
+import com.ll.ilta.global.payload.response.BaseResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.AccessLevel;

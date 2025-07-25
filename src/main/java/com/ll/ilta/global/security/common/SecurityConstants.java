@@ -1,4 +1,4 @@
-package com.ll.ilta.global.security.constant;
+package com.ll.ilta.global.security.common;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -13,7 +13,6 @@ public class SecurityConstants {
 
     public static final String[] allowUrls = {
         "/api/v2/posts/**",
-        "/api/v2/replies/**",
         "/login",
         "/auth/login/kakao/**",
         "/api/v2/oauth"          // 여기 추가: 카카오 OAuth Redirect URI 허용

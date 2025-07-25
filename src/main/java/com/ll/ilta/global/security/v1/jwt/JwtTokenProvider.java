@@ -1,4 +1,4 @@
-package com.ll.ilta.global.security;
+package com.ll.ilta.global.security.v1.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

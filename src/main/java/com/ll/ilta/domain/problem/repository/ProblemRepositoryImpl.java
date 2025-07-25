@@ -30,8 +30,8 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ProblemResponseDto> findProblemWithCursor(Long memberV1Id, String afterCursor, int limit) {
-        BooleanBuilder builder = new BooleanBuilder(problem.memberV1.id.eq(memberV1Id));
+    public List<ProblemResponseDto> findProblemWithCursor(Long memberId, String afterCursor, int limit) {
+        BooleanBuilder builder = new BooleanBuilder(problem.member.id.eq(memberId));
         builder.and(problem.activatedAt.isNotNull());
         if (afterCursor != null) {
             Cursor decoded = CursorUtil.decodeCursor(afterCursor);
@@ -51,7 +51,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             return List.of();
         }
 
-        return buildProblemDtos(memberV1Id, problemIds);
+        return buildProblemDtos(memberId, problemIds);
     }
 
     @Override
@@ -62,8 +62,8 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
         return problems.isEmpty() ? null : problems.get(0);
     }
 
-    private List<ProblemResponseDto> buildProblemDtos(Long memberV1Id, List<Long> problemIds) {
-        List<ProblemResponseDto> problems = fetchProblems(memberV1Id, problemIds);
+    private List<ProblemResponseDto> buildProblemDtos(Long memberId, List<Long> problemIds) {
+        List<ProblemResponseDto> problems = fetchProblems(memberId, problemIds);
 
         Map<Long, String> imageUrlMap = fetchImageUrls(problemIds);
 
@@ -80,17 +80,17 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
         }).toList();
     }
 
-    private List<ProblemResponseDto> fetchProblems(Long memberV1Id, List<Long> problemIds) {
+    private List<ProblemResponseDto> fetchProblems(Long memberId, List<Long> problemIds) {
         BooleanBuilder builder = new BooleanBuilder(problem.id.in(problemIds));
-        if (memberV1Id != null) {
-            builder.and(problem.memberV1.id.eq(memberV1Id));
+        if (memberId != null) {
+            builder.and(problem.member.id.eq(memberId));
         }
 
         return queryFactory.select(
                 Projections.constructor(ProblemResponseDto.class, problem.id, Expressions.nullExpression(String.class),
                     favorite.id.isNotNull(), Expressions.constant(""), Expressions.constant(""), Expressions.constant(""),
                     problem.activatedAt)).from(problem).leftJoin(favorite)
-            .on(favorite.problem.id.eq(problem.id).and(memberV1Id != null ? favorite.memberV1.id.eq(memberV1Id) : null))
+            .on(favorite.problem.id.eq(problem.id).and(memberId != null ? favorite.member.id.eq(memberId) : null))
             .where(builder).orderBy(problem.activatedAt.desc(), problem.id.desc()).fetch();
     }
 
