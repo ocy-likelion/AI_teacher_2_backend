@@ -1,8 +1,8 @@
-package com.ll.ilta.global.config;
+package com.ll.ilta.global.security.v1.config;
 
-import com.ll.ilta.global.security.JwtAuthenticationFilter;
-import com.ll.ilta.global.security.JwtTokenProvider;
-import com.ll.ilta.global.security.memberdetails.V1.MemberV1DetailsServiceImpl;
+import com.ll.ilta.global.security.v1.jwt.JwtAuthenticationFilter;
+import com.ll.ilta.global.security.v1.jwt.JwtTokenProvider;
+import com.ll.ilta.global.security.v1.member.MemberV1DetailsServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

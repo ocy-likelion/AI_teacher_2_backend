@@ -1,4 +1,4 @@
-package com.ll.ilta.global.security.memberdetails.V1;
+package com.ll.ilta.global.security.v1.member;
 
 import com.ll.ilta.domain.member.v1.entity.MemberV1;
 import com.ll.ilta.domain.member.v1.repository.MemberV1Repository;

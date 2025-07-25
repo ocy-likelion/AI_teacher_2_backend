@@ -1,4 +1,4 @@
-package com.ll.ilta.domain.member.v2.dto;
+package com.ll.ilta.domain.member.v2.entity;
 
 
 import com.ll.ilta.global.common.BaseEntity;

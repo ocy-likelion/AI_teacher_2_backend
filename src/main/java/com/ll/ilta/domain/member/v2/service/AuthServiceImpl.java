@@ -2,10 +2,10 @@ package com.ll.ilta.domain.member.v2.service;
 
 import com.ll.ilta.domain.member.v2.converter.AuthConverter;
 import com.ll.ilta.domain.member.v2.dto.KakaoDTO;
-import com.ll.ilta.domain.member.v2.dto.Member;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import com.ll.ilta.domain.member.v2.repository.MemberRepository;
-import com.ll.ilta.global.util.JwtUtil;
-import com.ll.ilta.global.util.KakaoUtil;
+import com.ll.ilta.global.security.v2.jwt.JwtUtil;
+import com.ll.ilta.global.security.v2.util.KakaoUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

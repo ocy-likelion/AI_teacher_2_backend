@@ -7,7 +7,7 @@ import com.ll.ilta.domain.member.v1.entity.MemberV1;
 import com.ll.ilta.domain.member.v1.repository.MemberV1Repository;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
 import com.ll.ilta.global.payload.exception.handler.AuthHandler;
-import com.ll.ilta.global.security.JwtTokenProvider;
+import com.ll.ilta.global.security.v1.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,5 +1,7 @@
 package com.ll.ilta.domain.problem.service;
 
+import com.ll.ilta.domain.concept.entity.Concept;
+import com.ll.ilta.domain.concept.repository.ConceptRepository;
 import com.ll.ilta.domain.favorite.repository.FavoriteRepository;
 import com.ll.ilta.domain.image.client.AiFeignClient;
 import com.ll.ilta.domain.image.dto.AiResponseDto;
@@ -7,8 +9,8 @@ import com.ll.ilta.domain.image.dto.SupabaseResponseDto;
 import com.ll.ilta.domain.image.entity.Image;
 import com.ll.ilta.domain.image.repository.ImageRepository;
 import com.ll.ilta.domain.image.service.SupabaseUploader;
-import com.ll.ilta.domain.member.v1.entity.MemberV1;
-import com.ll.ilta.domain.member.v1.service.MemberV1Service;
+import com.ll.ilta.domain.member.v2.entity.Member;
+import com.ll.ilta.domain.member.v2.service.MemberService;
 import com.ll.ilta.domain.problem.dto.ConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.entity.Problem;
@@ -17,8 +19,6 @@ import com.ll.ilta.domain.problem.entity.ProblemResult;
 import com.ll.ilta.domain.problem.repository.ProblemConceptRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
 import com.ll.ilta.domain.problem.repository.ProblemResultRepository;
-import com.ll.ilta.domain.concept.entity.Concept;
-import com.ll.ilta.domain.concept.repository.ConceptRepository;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import com.ll.ilta.global.common.service.CursorUtil;
 import java.util.List;
@@ -35,7 +35,7 @@ public class ProblemService {
 
     private static final String PROBLEMS_LIST_URL = "/api/v1/problem/list";
 
-    private final MemberV1Service memberv1Service;
+    private final MemberService memberService;
     private final SupabaseUploader supabaseUploader;
     private final AiFeignClient aiFeignClient;
     private final ProblemRepository problemRepository;
@@ -49,13 +49,13 @@ public class ProblemService {
     private String baseUrl;
 
     @Transactional
-    public ProblemResponseDto createProblemWithImage(Long userId, MultipartFile file) {
-        MemberV1 memberV1 = memberv1Service.findById(userId);
+    public ProblemResponseDto createProblemWithImage(Long memberId, MultipartFile file) {
+        Member member = memberService.readMember(memberId);
 
-        SupabaseResponseDto uploadDto = supabaseUploader.upload(userId, file);
+        SupabaseResponseDto uploadDto = supabaseUploader.upload(memberId, file);
         String imageUrl = baseUrl + '/' + uploadDto.getKey();
 
-        Problem problem = problemRepository.save(Problem.from(memberV1));
+        Problem problem = problemRepository.save(Problem.from(member));
 
         AiResponseDto aiResponseDto = aiFeignClient.sendImageToAiServer(file);
 

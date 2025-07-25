@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.member.v2.converter;
 
-import com.ll.ilta.domain.member.v2.dto.Member;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthConverter {

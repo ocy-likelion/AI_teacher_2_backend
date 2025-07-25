@@ -1,4 +1,4 @@
-package com.ll.ilta.global.util;
+package com.ll.ilta.global.security.v2.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

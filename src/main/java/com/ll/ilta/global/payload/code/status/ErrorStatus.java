@@ -29,8 +29,10 @@ public enum ErrorStatus implements BaseErrorCode {
     ACCOUNT_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH401_4", "아이디를 잘못 입력했습니다. 회원가입 후 이용해주세요."),
 
     // 파싱 에러
-    PARSING_ERROR(HttpStatus.BAD_REQUEST, "PARSE400", "데이터 파싱 중 오류가 발생했습니다.");
+    PARSING_ERROR(HttpStatus.BAD_REQUEST, "PARSE400", "데이터 파싱 중 오류가 발생했습니다."),
 
+    // problem 에러
+    NOT_FOUND_PROBLEM(HttpStatus.NOT_FOUND, "PROBLEM404", "문제를 찾을 수 없습니다.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

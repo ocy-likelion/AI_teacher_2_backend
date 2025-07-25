@@ -1,10 +1,9 @@
 package com.ll.ilta.domain.member.v2.converter;
 
-import com.ll.ilta.domain.member.v2.dto.Member;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import com.ll.ilta.domain.member.v2.dto.request.MemberRequestDTO;
 import com.ll.ilta.domain.member.v2.dto.response.MemberResponseDTO;
 import java.util.List;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MemberConverter {

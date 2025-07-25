@@ -1,6 +1,6 @@
-package com.ll.ilta.global.security.memberdetails.V2;
+package com.ll.ilta.global.security.v2.member;
 
-import com.ll.ilta.domain.member.v2.dto.Member;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import com.ll.ilta.domain.member.v2.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

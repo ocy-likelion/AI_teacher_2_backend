@@ -1,4 +1,4 @@
-package com.ll.ilta.global.config;
+package com.ll.ilta.global.security.v2.config;
 
 import java.util.ArrayList;
 import java.util.List;

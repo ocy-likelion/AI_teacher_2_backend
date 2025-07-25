@@ -1,4 +1,4 @@
-package com.ll.ilta.global.util;
+package com.ll.ilta.global.security.v2.jwt;
 
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
 import com.ll.ilta.global.payload.exception.handler.AuthHandler;
