@@ -31,16 +31,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
+
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
     // /login 요청을 하면, 로그인 시도를 위해서 실행되는 함수
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+        throws AuthenticationException {
         MemberRequestDTO.LoginRequestDTO loginRequestDto = readBody(request);
 
+        log.info("[Login Attempt] 이메일: {}", loginRequestDto.getEmail());
+
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-            UsernamePasswordAuthenticationToken.unauthenticated(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+            UsernamePasswordAuthenticationToken.unauthenticated(loginRequestDto.getEmail(),
+                loginRequestDto.getPassword());
 
         return authenticationManager.authenticate(usernamePasswordAuthenticationToken);
     }
@@ -89,7 +94,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+        AuthenticationException failed) throws IOException {
         ErrorStatus errorStatus;
 
         if (failed instanceof UsernameNotFoundException) {
@@ -99,6 +105,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         } else {
             errorStatus = ErrorStatus.AUTHENTICATION_FAILED;
         }
+
+        log.warn("[Login Failed] 사유: {}, 요청 URI: {}", failed.getMessage(), request.getRequestURI());
         throw new AuthHandler(errorStatus);
     }
 }

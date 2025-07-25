@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.ilta.domain.member.v2.dto.KakaoDTO;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
 import com.ll.ilta.global.payload.exception.handler.AuthHandler;
+import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,34 +29,50 @@ public class KakaoUtil {
     @Value("${kakao.auth.clientSecret}")
     private String clientSecret;
 
+    @PostConstruct
+    public void init() {
+        log.info("Kakao clientId = {}", client);
+        log.info("Kakao redirectUri = {}", redirect);
+        log.info("Kakao clientSecret = {}", clientSecret);
+    }
+
     public KakaoDTO.OAuthToken requestToken(String accessCode) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", client);
-        params.add("client_secret", clientSecret);
-        params.add("redirect_uri", redirect);
-        params.add("code", accessCode);
-
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST,
-            kakaoTokenRequest, String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        KakaoDTO.OAuthToken oAuthToken = null;
-
+        log.info("requestToken called with code={}", accessCode);
         try {
-            oAuthToken = objectMapper.readValue(response.getBody(), KakaoDTO.OAuthToken.class);
-            log.info("oAuthToken : " + oAuthToken.getAccess_token());
-        } catch (JsonProcessingException e) {
-            throw new AuthHandler(ErrorStatus.PARSING_ERROR);
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("grant_type", "authorization_code");
+            params.add("client_id", client);
+            params.add("client_secret", clientSecret);
+            params.add("redirect_uri", redirect);
+            params.add("code", accessCode);
+
+            HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange("https://kauth.kakao.com/oauth/token",
+                HttpMethod.POST,
+                kakaoTokenRequest, String.class);
+            log.info("Kakao token response status: {}", response.getStatusCode());
+            log.info("Kakao token response body: {}", response.getBody());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            KakaoDTO.OAuthToken oAuthToken = objectMapper.readValue(response.getBody(), KakaoDTO.OAuthToken.class);
+            log.info("oAuthToken : {}", oAuthToken.getAccess_token());
+            return oAuthToken;
+
+        } catch (
+            JsonProcessingException e) {
+            log.error("Json processing error: ", e);
+            throw new RuntimeException("Failed to parse Kakao token response", e);
+        } catch (
+            Exception e) {
+            log.error("Exception in requestToken: ", e);
+            throw new RuntimeException("Failed to request Kakao token", e);
         }
-        return oAuthToken;
     }
 
 

@@ -32,13 +32,13 @@ public class MemberController {
 
     @GetMapping("/members/{memberId}") //자녀 정보 수정
     public BaseResponse<MemberResponseDTO.MemberPreviewDTO> readMember(@PathVariable Long memberId) {
-        Member member =  memberService.readMember( memberId);
+        Member member = memberService.readMember(memberId);
         return BaseResponse.onSuccess(MemberConverter.toMemberPreviewDTO(member));
     }
 
     @GetMapping("/members")
     public BaseResponse<MemberResponseDTO.MemberPreviewListDTO> readUsers() {
-        List<Member> memberList =  memberService.readMembers();
+        List<Member> memberList = memberService.readMembers();
         return BaseResponse.onSuccess(MemberConverter.toMemberPreviewListDTO(memberList));
     }
 
@@ -55,4 +55,9 @@ public class MemberController {
         return BaseResponse.onSuccess(MemberConverter.toMemberPreviewDTO(member));
     }
 
+    @GetMapping("/members/{memberId}/child-info")
+    public BaseResponse<Boolean> checkChildInfo(@PathVariable Long memberId) {
+        boolean hasChild = memberService.hasChildInfo(memberId);
+        return BaseResponse.onSuccess(hasChild);
+    }
 }

@@ -8,6 +8,7 @@ import com.ll.ilta.domain.member.v2.repository.MemberRepository;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
 import com.ll.ilta.global.payload.exception.handler.MemberHandler;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,17 @@ public class MemberServiceImpl implements MemberService {
     public Member updateMember(MemberRequestDTO.UpdateMemberDTO updateMemberDTO, Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
-        member.update(updateMemberDTO.getName(),updateMemberDTO.getGrade());
+        member.update(updateMemberDTO.getName(), updateMemberDTO.getGrade());
         return member;
+    }
+
+    @Override
+    public boolean hasChildInfo(Long memberId) {
+        Optional<Member> memberOpt = memberRepository.findById(memberId);
+        if (memberOpt.isEmpty()) {
+            return false;
+        }
+        Member member = memberOpt.get();
+        return member.getGrade() != null && member.getName() != null;
     }
 }

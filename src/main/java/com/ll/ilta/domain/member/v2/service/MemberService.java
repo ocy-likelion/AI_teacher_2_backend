@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface MemberService {
 
+    boolean hasChildInfo(Long memberId);
+
     Member createMember(MemberRequestDTO.JoinDTO joinDTO);
 
     Member readMember(Long memberId);

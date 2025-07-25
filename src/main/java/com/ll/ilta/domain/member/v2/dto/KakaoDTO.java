@@ -1,11 +1,13 @@
 package com.ll.ilta.domain.member.v2.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class KakaoDTO {
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Getter
     @Setter
     @NoArgsConstructor
@@ -17,8 +19,10 @@ public class KakaoDTO {
         private int expires_in;
         private String scope;
         private int refresh_token_expires_in;
+        private String id_token;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Getter
     @Setter
     @NoArgsConstructor
@@ -29,6 +33,7 @@ public class KakaoDTO {
         private Properties properties;
         private KakaoAccount kakao_account;
 
+        @JsonIgnoreProperties(ignoreUnknown = true)
         @Getter
         @Setter
         @NoArgsConstructor
@@ -37,6 +42,7 @@ public class KakaoDTO {
             private String nickname;
         }
 
+        @JsonIgnoreProperties(ignoreUnknown = true)
         @Getter
         @Setter
         @NoArgsConstructor
@@ -50,6 +56,7 @@ public class KakaoDTO {
             private Boolean is_email_valid;
             private Profile profile;
 
+            @JsonIgnoreProperties(ignoreUnknown = true)
             @Getter
             @Setter
             @NoArgsConstructor
