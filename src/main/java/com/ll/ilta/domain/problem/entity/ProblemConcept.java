@@ -1,5 +1,6 @@
 package com.ll.ilta.domain.problem.entity;
 
+import com.ll.ilta.domain.concept.entity.Concept;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
