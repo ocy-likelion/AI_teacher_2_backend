@@ -1,9 +1,9 @@
 package com.ll.ilta.domain.problem.dto;
 
+import com.ll.ilta.domain.concept.dto.ConceptDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter

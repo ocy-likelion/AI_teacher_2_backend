@@ -1,29 +1,31 @@
 package com.ll.ilta.domain.image.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ll.ilta.domain.problem.dto.ConceptDto;
+import com.ll.ilta.domain.concept.entity.Concept;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class AiResponseDto {
 
-    @JsonProperty("ocr_text")
+    @JsonProperty("summary")
     private final String ocrResult;
 
     @JsonProperty("explanation")
     private final String llmResult;
 
     @JsonProperty("concept_tags")
-    private final List<ConceptDto> conceptTags;
+    private final List<Concept> conceptTags;
 
-    private AiResponseDto(String ocrResult, String llmResult, List<ConceptDto> conceptTags) {
+    @Builder
+    private AiResponseDto(String ocrResult, String llmResult, List<Concept> conceptTags) {
         this.ocrResult = ocrResult;
         this.llmResult = llmResult;
         this.conceptTags = conceptTags;
     }
 
-    public static AiResponseDto of(String ocrResult, String llmResult, List<ConceptDto> concepts) {
-        return new AiResponseDto(ocrResult, llmResult, concepts);
+    public static AiResponseDto of(String ocrResult, String llmResult, List<Concept> conceptTags) {
+        return AiResponseDto.builder().ocrResult(ocrResult).llmResult(llmResult).conceptTags(conceptTags).build();
     }
 }

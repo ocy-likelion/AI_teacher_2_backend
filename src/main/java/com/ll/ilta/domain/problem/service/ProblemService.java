@@ -9,7 +9,7 @@ import com.ll.ilta.domain.image.repository.ImageRepository;
 import com.ll.ilta.domain.image.service.SupabaseUploader;
 import com.ll.ilta.domain.member.v1.entity.Member;
 import com.ll.ilta.domain.member.v1.service.MemberService;
-import com.ll.ilta.domain.problem.dto.ConceptDto;
+import com.ll.ilta.domain.concept.dto.ConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.entity.Problem;
 import com.ll.ilta.domain.problem.entity.ProblemConcept;
@@ -59,19 +59,19 @@ public class ProblemService {
 
         AiResponseDto aiResponseDto = aiFeignClient.sendImageToAiServer(file);
 
+        List<Concept> savedConcepts = aiResponseDto.getConceptTags().stream().map(
+                tag -> conceptRepository.findByName(tag.getName())
+                    .orElseGet(() -> conceptRepository.save(Concept.of(tag.getName(), tag.getDescription()))))
+            .collect(Collectors.toList());
+
+        List<ConceptDto> conceptDtos = savedConcepts.stream()
+            .map(concept -> ConceptDto.of(concept.getId(), concept.getName())).toList();
+
         ProblemResult result = ProblemResult.of(aiResponseDto.getOcrResult(), aiResponseDto.getLlmResult(), true,
             problem);
         problemResultRepository.save(result);
-
-        List<ConceptDto> conceptDtos = aiResponseDto.getConceptTags().stream()
-            .map(tag -> ConceptDto.of(tag.getId(), tag.getName())).toList();
-
-        List<Concept> savedConcepts = conceptDtos.stream().map(
-                dto -> conceptRepository.findByName(dto.getName()).orElseGet(() -> conceptRepository.save(dto.toEntity())))
-            .collect(Collectors.toList());
-
+        
         List<ProblemConcept> problemConcepts = createProblemConcepts(problem, savedConcepts);
-
         problemConceptRepository.saveAll(problemConcepts);
 
         Image image = imageRepository.save(Image.of(imageUrl, problem));

@@ -8,7 +8,7 @@ import static com.ll.ilta.domain.problem.entity.QProblemConcept.problemConcept;
 import static com.ll.ilta.domain.problem.entity.QProblemResult.problemResult;
 
 import com.ll.ilta.domain.favorite.dto.FavoriteResponseDto;
-import com.ll.ilta.domain.problem.dto.ConceptDto;
+import com.ll.ilta.domain.concept.dto.ConceptDto;
 import com.ll.ilta.domain.problem.entity.ProblemResult;
 import com.ll.ilta.global.common.dto.Cursor;
 import com.ll.ilta.global.common.service.CursorUtil;
@@ -36,13 +36,8 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
                 .or(favorite.problem.createdAt.eq(decoded.createdAt()).and(favorite.id.lt(decoded.id()))));
         }
 
-        List<Long> favoriteIds = queryFactory.select(favorite.id)
-            .from(favorite)
-            .join(favorite.problem)
-            .where(builder)
-            .orderBy(favorite.problem.createdAt.desc(), favorite.id.desc())
-            .limit(limit + 1)
-            .fetch();
+        List<Long> favoriteIds = queryFactory.select(favorite.id).from(favorite).join(favorite.problem).where(builder)
+            .orderBy(favorite.problem.createdAt.desc(), favorite.id.desc()).limit(limit + 1).fetch();
 
         boolean hasNext = favoriteIds.size() > limit;
         if (hasNext) {
@@ -57,16 +52,11 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
     }
 
     private List<FavoriteResponseDto> buildFavoriteDtos(Long memberId, List<Long> favoriteIds) {
-        List<Tuple> favoriteInfos = queryFactory
-            .select(favorite.id, favorite.problem.id, problem.createdAt)
-            .from(favorite)
-            .where(favorite.id.in(favoriteIds))
-            .orderBy(favorite.problem.createdAt.desc(), favorite.id.desc())
-            .fetch();
+        List<Tuple> favoriteInfos = queryFactory.select(favorite.id, favorite.problem.id, problem.createdAt)
+            .from(favorite).where(favorite.id.in(favoriteIds))
+            .orderBy(favorite.problem.createdAt.desc(), favorite.id.desc()).fetch();
 
-        List<Long> problemIds = favoriteInfos.stream()
-            .map(t -> t.get(favorite.problem.id))
-            .toList();
+        List<Long> problemIds = favoriteInfos.stream().map(t -> t.get(favorite.problem.id)).toList();
 
         Map<Long, String> imageUrlMap = fetchImageUrls(problemIds);
         Map<Long, ProblemResult> resultMap = fetchResultMap(problemIds);
@@ -77,15 +67,9 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
             Long problemId = info.get(favorite.problem.id);
             ProblemResult result = resultMap.get(problemId);
 
-            return FavoriteResponseDto.of(
-                favoriteId,
-                problemId,
-                imageUrlMap.getOrDefault(problemId, null),
-                conceptMap.getOrDefault(problemId, List.of()),
-                result != null ? result.getOcrResult() : null,
-                result != null ? result.getLlmResult() : null,
-                info.get(problem.createdAt)
-            );
+            return FavoriteResponseDto.of(favoriteId, problemId, imageUrlMap.getOrDefault(problemId, null),
+                conceptMap.getOrDefault(problemId, List.of()), result != null ? result.getOcrResult() : null,
+                result != null ? result.getLlmResult() : null, info.get(problem.createdAt));
         }).toList();
     }
 
@@ -105,13 +89,11 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
 
     private Map<Long, List<ConceptDto>> fetchConceptsMap(List<Long> problemIds) {
         List<Tuple> tuples = queryFactory.select(problemConcept.problem.id, concept.id, concept.name,
-                concept.description)
-            .from(problemConcept).join(problemConcept.concept, concept).where(problemConcept.problem.id.in(problemIds))
-            .fetch();
+                concept.description).from(problemConcept).join(problemConcept.concept, concept)
+            .where(problemConcept.problem.id.in(problemIds)).fetch();
 
         return tuples.stream().collect(Collectors.groupingBy(t -> t.get(problemConcept.problem.id),
-            Collectors.mapping(t -> ConceptDto.of(t.get(concept.id), t.get(concept.name)),
-                Collectors.toList())));
+            Collectors.mapping(t -> ConceptDto.of(t.get(concept.id), t.get(concept.name)), Collectors.toList())));
     }
 
 }
