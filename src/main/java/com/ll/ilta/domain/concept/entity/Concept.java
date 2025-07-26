@@ -24,7 +24,7 @@ public class Concept {
     @Column(columnDefinition = "text")
     private String description;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private Concept(Long id, String name, String description) {
         this.id = id;
         this.name = name;

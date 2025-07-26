@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,12 +34,16 @@ public class ProblemResult {
     @JoinColumn(name = "problem_id", nullable = false, unique = true)
     private Problem problem;
 
+    @Builder(access = AccessLevel.PRIVATE)
+    private ProblemResult(String ocrResult, String llmResult, Boolean status, Problem problem) {
+        this.ocrResult = ocrResult;
+        this.llmResult = llmResult;
+        this.status = status;
+        this.problem = problem;
+    }
+
     public static ProblemResult of(String ocrResult, String llmResult, Boolean status, Problem problem) {
-        ProblemResult result = new ProblemResult();
-        result.ocrResult = ocrResult;
-        result.llmResult = llmResult;
-        result.status = status;
-        result.problem = problem;
-        return result;
+        return ProblemResult.builder().ocrResult(ocrResult).llmResult(llmResult).status(status).problem(problem)
+            .build();
     }
 }

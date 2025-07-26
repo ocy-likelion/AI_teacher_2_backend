@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,12 +27,13 @@ public class Image {
     @JoinColumn(name = "problem_id", nullable = false, unique = true)
     private Problem problem;
 
-    public Image(String imageUrl, Problem problem) {
+    @Builder(access = AccessLevel.PRIVATE)
+    private Image(String imageUrl, Problem problem) {
         this.imageUrl = imageUrl;
         this.problem = problem;
     }
 
     public static Image of(String imageUrl, Problem problem) {
-        return new Image(imageUrl, problem);
+        return Image.builder().imageUrl(imageUrl).problem(problem).build();
     }
 }
