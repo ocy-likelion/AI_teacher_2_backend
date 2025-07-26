@@ -18,6 +18,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
+        jdbc.time_zone: Asia/Seoul
 
 logging:
   level:
