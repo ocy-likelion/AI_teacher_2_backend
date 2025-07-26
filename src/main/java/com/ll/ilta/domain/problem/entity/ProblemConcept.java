@@ -30,7 +30,7 @@ public class ProblemConcept {
     @JoinColumn(name = "concept_id", nullable = false)
     private Concept concept;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private ProblemConcept(Problem problem, Concept concept) {
         this.problem = problem;
         this.concept = concept;
