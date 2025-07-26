@@ -14,9 +14,4 @@ public class SupabaseResponseDto {
 
     @JsonProperty("Id")
     private String id;
-
-    private SupabaseResponseDto(String key, String id) {
-        this.key = key;
-        this.id = id;
-    }
 }
