@@ -10,8 +10,8 @@ public class CursorUtil {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    public static String encodeCursor(Long id, LocalDateTime createdAt) {
-        String raw = id + "|" + createdAt.format(FORMATTER);
+    public static String encodeCursor(Long id, LocalDateTime activatedAt) {
+        String raw = id + "|" + activatedAt.format(FORMATTER);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(raw.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -23,7 +23,7 @@ public class CursorUtil {
             throw new IllegalArgumentException("Invalid cursor format");
         }
         Long id = Long.parseLong(parts[0]);
-        LocalDateTime createdAt = LocalDateTime.parse(parts[1], FORMATTER);
-        return new Cursor(id, createdAt);
+        LocalDateTime activatedAt = LocalDateTime.parse(parts[1], FORMATTER);
+        return new Cursor(id, activatedAt);
     }
 }

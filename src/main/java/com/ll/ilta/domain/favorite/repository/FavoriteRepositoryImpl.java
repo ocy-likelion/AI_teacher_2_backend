@@ -30,14 +30,15 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
     @Override
     public List<FavoriteResponseDto> findFavoriteWithCursor(Long memberId, String afterCursor, int limit) {
         BooleanBuilder builder = new BooleanBuilder(favorite.member.id.eq(memberId));
+        builder.and(favorite.problem.activatedAt.isNotNull());
         if (afterCursor != null) {
             Cursor decoded = CursorUtil.decodeCursor(afterCursor);
-            builder.and(favorite.problem.createdAt.lt(decoded.createdAt())
-                .or(favorite.problem.createdAt.eq(decoded.createdAt()).and(favorite.id.lt(decoded.id()))));
+            builder.and(favorite.problem.activatedAt.lt(decoded.activatedAt())
+                .or(favorite.problem.activatedAt.eq(decoded.activatedAt()).and(favorite.id.lt(decoded.id()))));
         }
 
-        List<Long> favoriteIds = queryFactory.select(favorite.id).from(favorite).join(favorite.problem).where(builder)
-            .orderBy(favorite.problem.createdAt.desc(), favorite.id.desc()).limit(limit + 1).fetch();
+        List<Long> favoriteIds = queryFactory.select(favorite.id).from(favorite).join(favorite.problem, problem)
+            .where(builder).orderBy(favorite.problem.activatedAt.desc(), favorite.id.desc()).limit(limit + 1).fetch();
 
         boolean hasNext = favoriteIds.size() > limit;
         if (hasNext) {
@@ -52,9 +53,9 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
     }
 
     private List<FavoriteResponseDto> buildFavoriteDtos(Long memberId, List<Long> favoriteIds) {
-        List<Tuple> favoriteInfos = queryFactory.select(favorite.id, favorite.problem.id, problem.createdAt)
+        List<Tuple> favoriteInfos = queryFactory.select(favorite.id, favorite.problem.id, problem.activatedAt)
             .from(favorite).where(favorite.id.in(favoriteIds))
-            .orderBy(favorite.problem.createdAt.desc(), favorite.id.desc()).fetch();
+            .orderBy(favorite.problem.activatedAt.desc(), favorite.id.desc()).fetch();
 
         List<Long> problemIds = favoriteInfos.stream().map(t -> t.get(favorite.problem.id)).toList();
 
@@ -69,7 +70,7 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
 
             return FavoriteResponseDto.of(favoriteId, problemId, imageUrlMap.getOrDefault(problemId, null),
                 conceptMap.getOrDefault(problemId, List.of()), result != null ? result.getOcrResult() : null,
-                result != null ? result.getLlmResult() : null, info.get(problem.createdAt));
+                result != null ? result.getLlmResult() : null, info.get(problem.activatedAt));
         }).toList();
     }
 
