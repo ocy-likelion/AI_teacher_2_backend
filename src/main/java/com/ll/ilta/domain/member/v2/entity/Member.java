@@ -14,11 +14,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-@Getter
+@Entity
 @Table(name = "member")
 public class Member extends BaseEntity {
 
@@ -27,7 +27,7 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    private String name;
+    private String nickname;
 
     private String email;
 
@@ -35,14 +35,12 @@ public class Member extends BaseEntity {
 
     private String role;
 
-    private Integer grade;
+    private String childName;
 
-    public void update(String name, Integer grade) {
-        if (name != null) {
-            this.name = name;
-        }
-        if (grade != null) {
-            this.grade = grade;
-        }
+    private Integer childGrade;
+
+    public void updateMemberInfo(String nickname) {
+       this.nickname=nickname;
     }
+
 }

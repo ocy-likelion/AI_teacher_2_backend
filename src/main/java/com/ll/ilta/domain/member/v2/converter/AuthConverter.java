@@ -5,12 +5,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthConverter {
 
-    public static Member toMember(String email, String name, String password, PasswordEncoder passwordEncoder) {
+    public static Member toMember(String email, String nickname, String password, PasswordEncoder passwordEncoder) {
         return Member.builder()
             .email(email)
             .role("ROLE_USER")
             .password(passwordEncoder.encode(password))
-            .name(name)
+            .nickname(nickname)
             .build();
     }
 

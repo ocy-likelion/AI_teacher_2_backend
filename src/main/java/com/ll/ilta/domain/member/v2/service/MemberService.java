@@ -6,13 +6,11 @@ import java.util.List;
 
 public interface MemberService {
 
-    Member createMember(MemberRequestDTO.JoinDTO joinDTO);
-
     Member readMember(Long memberId); // 로그인 사용자 기준
 
-    List<Member> readAllMember();
+    List<Member> readAllMembers();
 
-    boolean checkChildInfo(Long memberId); // 로그인 사용자 기준
+    boolean existsChildInfo(Long memberId); // 로그인 사용자 기준
 
     void deleteMyInfo(Long memberId); // 로그인 사용자 기준
 
