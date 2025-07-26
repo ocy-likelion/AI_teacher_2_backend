@@ -104,15 +104,16 @@ public class SecurityConfigV2 {
             .requestMatchers(HttpMethod.POST, "/api/v1/favorite").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.POST, "/api/v1/image/upload").hasAnyRole("USER", "ADMIN")
 
-            .requestMatchers(HttpMethod.PATCH, "/api/v2/members/me").hasAnyRole("USER", "ADMIN")
-            .requestMatchers(HttpMethod.DELETE, "/api/v2/members/me").hasAnyRole("USER", "ADMIN")
-            .requestMatchers(HttpMethod.GET, "/api/v2/members/me/child-info").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.GET, "/api/v2/members/me/profile").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.PATCH, "/api/v2/members/me/profile").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/v2/members/me/profile").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.GET, "/api/v2/members/me/child-info/exist").hasAnyRole("USER", "ADMIN")
 
             .requestMatchers(HttpMethod.POST, "/api/v2/members/{memberId}/posts").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.PATCH, "/api/v2/posts/{postId}").hasAnyRole("USER", "ADMIN")
 
             // ✅ 관리자 전용
-            .requestMatchers(HttpMethod.GET, "/api/v2/members").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/api/v2/members/admin/all").hasRole("ADMIN")
 
             // ✅ 나머지는 인증 필요
             .anyRequest().authenticated()

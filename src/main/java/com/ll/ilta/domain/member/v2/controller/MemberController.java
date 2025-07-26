@@ -10,6 +10,8 @@ import com.ll.ilta.domain.member.v2.service.MemberService;
 import com.ll.ilta.global.payload.response.BaseResponse;
 import com.ll.ilta.global.security.v2.member.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,23 +24,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Member API", description = "회원 관련 API(MemberV2Controller)")
+@Tag(name = "Members", description = "회원 관련 API")
 @RestController
-@RequestMapping(value = "/api/v2", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v2/members", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @Operation(summary = "회원가입")
-    @PostMapping("/members")
-    public BaseResponse<MemberResponseDTO.JoinResultDTO> createMember(@RequestBody MemberRequestDTO.JoinDTO joinDTO) {
-        Member member = memberService.createMember(joinDTO);
-        return BaseResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
-    }
-
-    @Operation(summary = "내 정보 조회")
-    @GetMapping("/members/me")
+    @Operation(summary = "내 정보 조회", description = "JWT로 인증된 사용자 정보 조회")
+    @GetMapping("/me/profile")
     public BaseResponse<MemberResponseDTO.MemberPreviewDTO> readMember(
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
@@ -46,23 +41,15 @@ public class MemberController {
         return BaseResponse.onSuccess(MemberConverter.toMemberPreviewDTO(member));
     }
 
-    @Operation(summary = "전체 회원 조회")
-    @GetMapping("/members")
+    @Operation(summary = "[관리자 전용] 전체 회원 조회", description = "관리자 기능이라 추후 구현 예정")
+    @GetMapping("/admin/all")
     public BaseResponse<MemberResponseDTO.MemberPreviewListDTO> readAllMember() {
-        List<Member> memberList = memberService.readAllMember();
+        List<Member> memberList = memberService.readAllMembers();
         return BaseResponse.onSuccess(MemberConverter.toMemberPreviewListDTO(memberList));
     }
 
-    @Operation(summary = "내 정보 삭제")
-    @DeleteMapping("/members/me")
-    public BaseResponse<String> deleteMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long memberId = principalDetails.getMemberId();
-        memberService.deleteMyInfo(memberId);
-        return BaseResponse.onSuccess("삭제에 성공하였습니다.");
-    }
-
-    @Operation(summary = "내 정보 수정")
-    @PatchMapping("/members/me")
+    @Operation(summary = "회원 정보 수정", description = "이름, 프로필 사진 수정")
+    @PatchMapping("/me/profile")
     public BaseResponse<MemberResponseDTO.MemberPreviewDTO> updateMyInfo(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         @RequestBody MemberRequestDTO.UpdateMemberDTO updateMemberDTO) {
@@ -71,11 +58,34 @@ public class MemberController {
         return BaseResponse.onSuccess(MemberConverter.toMemberPreviewDTO(member));
     }
 
-    @Operation(summary = "내 자녀 정보 등록 여부 확인")
-    @GetMapping("/members/me/child-info")
-    public BaseResponse<Boolean> checkChildInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+//    @Operation(summary = "카카오 로그아웃", description = "카카오 토큰 연동 해제")
+//    @PostMapping("/logout")
+//    public BaseResponse<String> kakaoLogout(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+//        KakaoUtil.unlinkKakao(principalDetails.getEmail()); // Kakao API 호출
+//        return BaseResponse.onSuccess("로그아웃 완료");
+//    }
+
+    @Operation(summary = "회원 탈퇴", description = "카카오 연동 해제 및 사용자 정보 삭제")
+    @DeleteMapping("/me/profile")
+    public BaseResponse<String> deleteMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
-        boolean hasChild = memberService.checkChildInfo(memberId);
+        memberService.deleteMyInfo(memberId);
+        return BaseResponse.onSuccess("삭제에 성공하였습니다.");
+    }
+
+
+    @Operation(
+        summary = "자녀 정보 유무 확인",
+        description = "카카오 로그인 후 자녀 이름과 학년 유무를 체크하여 홈 화면 이동 판단"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "자녀 정보 존재 여부 반환"),
+        @ApiResponse(responseCode = "401", description = "인증 실패")
+    })
+    @GetMapping("/me/child-info/exist")
+    public BaseResponse<Boolean> existsChildInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMemberId();
+        boolean hasChild = memberService.existsChildInfo(memberId);
         return BaseResponse.onSuccess(hasChild);
     }
 }

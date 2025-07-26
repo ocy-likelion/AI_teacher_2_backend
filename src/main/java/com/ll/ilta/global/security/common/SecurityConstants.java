@@ -15,7 +15,8 @@ public class SecurityConstants {
         "/api/v2/posts/**",
         "/login",
         "/auth/login/kakao/**",
-        "/api/v2/oauth"          // 여기 추가: 카카오 OAuth Redirect URI 허용
+        "/api/v2/oauth",
+        "/api/v2/members/logout"
     };
 
     // 허용 Urls (swagger + allowUrls)
