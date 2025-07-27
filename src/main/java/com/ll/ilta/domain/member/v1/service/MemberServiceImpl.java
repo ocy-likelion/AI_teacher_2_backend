@@ -32,8 +32,7 @@ public class MemberServiceImpl implements MemberService {
         log.info("Login attempt: username={}", request.getUsername());
 
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.createToken(request.getUsername());
@@ -43,11 +42,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void createChild(MemberRequestDto request) {
-        Member member = Member.builder()
-            .username(request.getUsername())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .name(request.getName())
-            .grade(request.getGrade())
+        Member member = Member.builder().username(request.getUsername())
+            .password(passwordEncoder.encode(request.getPassword())).name(request.getName()).grade(request.getGrade())
             .build();
         memberRepository.save(member);
     }
@@ -66,5 +62,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
         return MemberResponseDto.from(member);
+    }
+
+    @Override
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
 }

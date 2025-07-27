@@ -5,6 +5,11 @@ spring:
   profiles:
     active: dev         # 배포 환경 시 prod, 개발 환경 시 dev 설정
     include: secret
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
 
   jpa:
     hibernate:
@@ -13,6 +18,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
+        jdbc.time_zone: Asia/Seoul
 
 logging:
   level:
@@ -21,3 +27,12 @@ logging:
     org.hibernate.SQL: OFF
     org.hibernate.orm.jdbc.bind: OFF
     org.springframework.transaction.interceptor: OFF
+
+supabase:
+  url: ${SUPABASE_URL}
+  image-base-url: ${SUPABASE_IMAGE_BASE_URL}
+  secret-key: ${SUPABASE_SECRET_KEY}
+  bucket: "ilta-images"
+
+app:
+  allowed-origins: ${APP_ALLOWED_ORIGINS}
