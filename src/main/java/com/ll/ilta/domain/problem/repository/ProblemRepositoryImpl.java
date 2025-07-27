@@ -32,14 +32,15 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
     @Override
     public List<ProblemResponseDto> findProblemWithCursor(Long memberId, String afterCursor, int limit) {
         BooleanBuilder builder = new BooleanBuilder(problem.member.id.eq(memberId));
+        builder.and(problem.activatedAt.isNotNull());
         if (afterCursor != null) {
             Cursor decoded = CursorUtil.decodeCursor(afterCursor);
-            builder.and(problem.createdAt.lt(decoded.createdAt())
-                .or(problem.createdAt.eq(decoded.createdAt()).and(problem.id.lt(decoded.id()))));
+            builder.and(problem.activatedAt.isNotNull().and(problem.activatedAt.lt(decoded.activatedAt())
+                .or(problem.activatedAt.eq(decoded.activatedAt()).and(problem.id.lt(decoded.id())))));
         }
 
         List<Long> problemIds = queryFactory.select(problem.id).from(problem).where(builder)
-            .orderBy(problem.createdAt.desc(), problem.id.desc()).limit(limit + 1).fetch();
+            .orderBy(problem.activatedAt.desc(), problem.id.desc()).limit(limit + 1).fetch();
 
         boolean hasNext = problemIds.size() > limit;
         if (hasNext) {
@@ -90,7 +91,7 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
                     favorite.id.isNotNull(), Expressions.constant(""), Expressions.constant(""), problem.createdAt))
             .from(problem).leftJoin(favorite)
             .on(favorite.problem.id.eq(problem.id).and(memberId != null ? favorite.member.id.eq(memberId) : null))
-            .where(builder).orderBy(problem.createdAt.desc(), problem.id.desc()).fetch();
+            .where(builder).orderBy(problem.activatedAt.desc(), problem.id.desc()).fetch();
     }
 
     private Map<Long, String> fetchImageUrls(List<Long> problemIds) {

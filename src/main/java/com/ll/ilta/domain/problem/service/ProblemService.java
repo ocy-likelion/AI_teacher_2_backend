@@ -70,7 +70,12 @@ public class ProblemService {
         ProblemResult result = ProblemResult.of(aiResponseDto.getOcrResult(), aiResponseDto.getLlmResult(), true,
             problem);
         problemResultRepository.save(result);
-        
+
+        if (Boolean.TRUE.equals(result.getStatus()) && !problem.isActivated()) {
+            problem.activate();
+            problemRepository.save(problem);
+        }
+
         List<ProblemConcept> problemConcepts = createProblemConcepts(problem, savedConcepts);
         problemConceptRepository.saveAll(problemConcepts);
 
