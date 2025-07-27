@@ -43,7 +43,7 @@ public class FavoriteService {
         String nextCursor = null;
         if (hasNextPage) {
             FavoriteResponseDto lastItem = favorites.get(limit - 1); // 현재 페이지 마지막
-            nextCursor = CursorUtil.encodeCursor(lastItem.getId(), lastItem.getCreatedAt());
+            nextCursor = CursorUtil.encodeCursor(lastItem.getId(), lastItem.getActivatedAt());
         }
 
         if (hasNextPage) {

@@ -9,23 +9,28 @@ import lombok.Getter;
 @Getter
 public class AiResponseDto {
 
-    @JsonProperty("summary")
+    @JsonProperty("ocr_result")
     private final String ocrResult;
 
+    @JsonProperty("summary")
+    private final String summary;
+
     @JsonProperty("explanation")
-    private final String llmResult;
+    private final String explanation;
 
     @JsonProperty("concept_tags")
     private final List<Concept> conceptTags;
 
     @Builder
-    private AiResponseDto(String ocrResult, String llmResult, List<Concept> conceptTags) {
+    private AiResponseDto(String ocrResult, String summary, String explanation, List<Concept> conceptTags) {
         this.ocrResult = ocrResult;
-        this.llmResult = llmResult;
+        this.summary = summary;
+        this.explanation = explanation;
         this.conceptTags = conceptTags;
     }
 
-    public static AiResponseDto of(String ocrResult, String llmResult, List<Concept> conceptTags) {
-        return AiResponseDto.builder().ocrResult(ocrResult).llmResult(llmResult).conceptTags(conceptTags).build();
+    public static AiResponseDto of(String ocrResult, String summary, String explanation, List<Concept> conceptTags) {
+        return AiResponseDto.builder().ocrResult(ocrResult).summary(summary).explanation(explanation)
+            .conceptTags(conceptTags).build();
     }
 }

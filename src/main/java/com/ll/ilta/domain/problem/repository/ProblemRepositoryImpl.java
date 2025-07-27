@@ -75,8 +75,8 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
             ProblemResult result = resultMap.get(p.getId());
             return ProblemResponseDto.of(p.getId(), imageUrlMap.getOrDefault(p.getId(), null),
                 conceptMap.getOrDefault(p.getId(), List.of()), p.getFavorite(),
-                result != null ? result.getOcrResult() : null, result != null ? result.getLlmResult() : null,
-                p.getCreatedAt());
+                result != null ? result.getOcrResult() : null, result != null ? result.getSummary() : null,
+                result != null ? result.getExplanation() : null, p.getActivatedAt());
         }).toList();
     }
 
@@ -88,8 +88,8 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
 
         return queryFactory.select(
                 Projections.constructor(ProblemResponseDto.class, problem.id, Expressions.nullExpression(String.class),
-                    favorite.id.isNotNull(), Expressions.constant(""), Expressions.constant(""), problem.createdAt))
-            .from(problem).leftJoin(favorite)
+                    favorite.id.isNotNull(), Expressions.constant(""), Expressions.constant(""), Expressions.constant(""),
+                    problem.activatedAt)).from(problem).leftJoin(favorite)
             .on(favorite.problem.id.eq(problem.id).and(memberId != null ? favorite.member.id.eq(memberId) : null))
             .where(builder).orderBy(problem.activatedAt.desc(), problem.id.desc()).fetch();
     }

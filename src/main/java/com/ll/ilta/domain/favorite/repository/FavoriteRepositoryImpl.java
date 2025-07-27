@@ -70,7 +70,8 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
 
             return FavoriteResponseDto.of(favoriteId, problemId, imageUrlMap.getOrDefault(problemId, null),
                 conceptMap.getOrDefault(problemId, List.of()), result != null ? result.getOcrResult() : null,
-                result != null ? result.getLlmResult() : null, info.get(problem.activatedAt));
+                result != null ? result.getSummary() : null, result != null ? result.getExplanation() : null,
+                info.get(problem.activatedAt));
         }).toList();
     }
 
