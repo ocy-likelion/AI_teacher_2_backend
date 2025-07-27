@@ -26,7 +26,10 @@ public class ProblemResult {
     private String ocrResult;
 
     @Column(columnDefinition = "text")
-    private String llmResult;
+    private String summary;
+
+    @Column(columnDefinition = "text")
+    private String explanation;
 
     private Boolean status;
 
@@ -35,15 +38,17 @@ public class ProblemResult {
     private Problem problem;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private ProblemResult(String ocrResult, String llmResult, Boolean status, Problem problem) {
+    private ProblemResult(String ocrResult, String summary, String explanation, Boolean status, Problem problem) {
         this.ocrResult = ocrResult;
-        this.llmResult = llmResult;
+        this.summary = summary;
+        this.explanation = explanation;
         this.status = status;
         this.problem = problem;
     }
 
-    public static ProblemResult of(String ocrResult, String llmResult, Boolean status, Problem problem) {
-        return ProblemResult.builder().ocrResult(ocrResult).llmResult(llmResult).status(status).problem(problem)
-            .build();
+    public static ProblemResult of(String ocrResult, String summary, String explanation, Boolean status,
+        Problem problem) {
+        return ProblemResult.builder().ocrResult(ocrResult).summary(summary).explanation(explanation).status(status)
+            .problem(problem).build();
     }
 }

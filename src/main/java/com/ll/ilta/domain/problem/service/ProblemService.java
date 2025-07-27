@@ -67,8 +67,8 @@ public class ProblemService {
         List<ConceptDto> conceptDtos = savedConcepts.stream()
             .map(concept -> ConceptDto.of(concept.getId(), concept.getName())).toList();
 
-        ProblemResult result = ProblemResult.of(aiResponseDto.getOcrResult(), aiResponseDto.getLlmResult(), true,
-            problem);
+        ProblemResult result = ProblemResult.of(aiResponseDto.getOcrResult(), aiResponseDto.getSummary(),
+            aiResponseDto.getExplanation(), true, problem);
         problemResultRepository.save(result);
 
         if (Boolean.TRUE.equals(result.getStatus()) && !problem.isActivated()) {
@@ -82,7 +82,7 @@ public class ProblemService {
         Image image = imageRepository.save(Image.of(imageUrl, problem));
 
         return ProblemResponseDto.of(problem.getId(), image.getImageUrl(), conceptDtos, false, result.getOcrResult(),
-            result.getLlmResult(), problem.getCreatedAt());
+            result.getSummary(), result.getExplanation(), problem.getActivatedAt());
     }
 
     public List<ProblemConcept> createProblemConcepts(Problem problem, List<Concept> concepts) {
@@ -101,7 +101,7 @@ public class ProblemService {
         String nextCursor = null;
         if (hasNextPage) {
             ProblemResponseDto lastItem = problems.get(limit - 1); // 현재 페이지 마지막
-            nextCursor = CursorUtil.encodeCursor(lastItem.getId(), lastItem.getCreatedAt());
+            nextCursor = CursorUtil.encodeCursor(lastItem.getId(), lastItem.getActivatedAt());
         }
 
         if (hasNextPage) {

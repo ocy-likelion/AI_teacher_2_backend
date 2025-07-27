@@ -15,24 +15,26 @@ public class FavoriteResponseDto {
     private final String imageUrl;
     private final List<ConceptDto> concepts;
     private final String ocrResult;
-    private final String llmResult;
-    private final LocalDateTime createdAt;
+    private final String summary;
+    private final String explanation;
+    private final LocalDateTime activatedAt;
 
     @Builder
     private FavoriteResponseDto(Long id, Long problemId, String imageUrl, List<ConceptDto> concepts, String ocrResult,
-        String llmResult, LocalDateTime createdAt) {
+        String summary, String explanation, LocalDateTime activatedAt) {
         this.id = id;
         this.problemId = problemId;
         this.imageUrl = imageUrl;
         this.concepts = concepts != null ? concepts : Collections.emptyList();
         this.ocrResult = ocrResult;
-        this.llmResult = llmResult;
-        this.createdAt = createdAt;
+        this.summary = summary;
+        this.explanation = explanation;
+        this.activatedAt = activatedAt;
     }
 
     public static FavoriteResponseDto of(Long id, Long problemId, String imageUrl, List<ConceptDto> concepts,
-        String ocrResult, String llmResult, LocalDateTime createdAt) {
+        String ocrResult, String summary, String explanation, LocalDateTime activatedAt) {
         return FavoriteResponseDto.builder().id(id).problemId(problemId).imageUrl(imageUrl).concepts(concepts)
-            .ocrResult(ocrResult).llmResult(llmResult).createdAt(createdAt).build();
+            .ocrResult(ocrResult).summary(summary).explanation(explanation).activatedAt(activatedAt).build();
     }
 }
