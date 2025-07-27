@@ -7,7 +7,7 @@ import static com.ll.ilta.domain.problem.entity.QProblemConcept.problemConcept;
 import static com.ll.ilta.domain.problem.entity.QProblemResult.problemResult;
 import static com.ll.ilta.domain.image.entity.QImage.image;
 
-import com.ll.ilta.domain.problem.dto.ConceptDto;
+import com.ll.ilta.domain.concept.dto.ConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.entity.ProblemResult;
 import com.ll.ilta.global.common.dto.Cursor;
@@ -108,12 +108,11 @@ public class ProblemRepositoryImpl implements ProblemRepositoryCustom {
     }
 
     private Map<Long, List<ConceptDto>> fetchConceptsMap(List<Long> problemIds) {
-        List<Tuple> tuples = queryFactory.select(problemConcept.problem.id, concept.id, concept.name, concept.description)
-            .from(problemConcept).join(problemConcept.concept, concept).where(problemConcept.problem.id.in(problemIds))
-            .fetch();
+        List<Tuple> tuples = queryFactory.select(problemConcept.problem.id, concept.id, concept.name,
+                concept.description).from(problemConcept).join(problemConcept.concept, concept)
+            .where(problemConcept.problem.id.in(problemIds)).fetch();
 
         return tuples.stream().collect(Collectors.groupingBy(t -> t.get(problemConcept.problem.id),
-            Collectors.mapping(t -> ConceptDto.of(t.get(concept.id), t.get(concept.name)),
-                Collectors.toList())));
+            Collectors.mapping(t -> ConceptDto.of(t.get(concept.id), t.get(concept.name)), Collectors.toList())));
     }
 }

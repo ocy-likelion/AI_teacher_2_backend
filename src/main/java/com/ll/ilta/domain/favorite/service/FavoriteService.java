@@ -62,7 +62,7 @@ public class FavoriteService {
 
         if (existing.isPresent()) {
             favoriteRepository.delete(existing.get());
-            return new FavoriteToggleResponseDto(false);
+            return FavoriteToggleResponseDto.of(false);
         } else {
             Problem problem = problemRepository.findById(problemId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PROBLEM));
@@ -70,7 +70,7 @@ public class FavoriteService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
 
             favoriteRepository.save(Favorite.of(problem, member));
-            return new FavoriteToggleResponseDto(true);
+            return FavoriteToggleResponseDto.of(true);
         }
 
     }

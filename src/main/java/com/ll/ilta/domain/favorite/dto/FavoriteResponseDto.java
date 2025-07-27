@@ -1,9 +1,10 @@
 package com.ll.ilta.domain.favorite.dto;
 
-import com.ll.ilta.domain.problem.dto.ConceptDto;
+import com.ll.ilta.domain.concept.dto.ConceptDto;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -17,8 +18,9 @@ public class FavoriteResponseDto {
     private final String llmResult;
     private final LocalDateTime createdAt;
 
-    private FavoriteResponseDto(Long id, Long problemId, String imageUrl, List<ConceptDto> concepts,
-        String ocrResult, String llmResult, LocalDateTime createdAt) {
+    @Builder
+    private FavoriteResponseDto(Long id, Long problemId, String imageUrl, List<ConceptDto> concepts, String ocrResult,
+        String llmResult, LocalDateTime createdAt) {
         this.id = id;
         this.problemId = problemId;
         this.imageUrl = imageUrl;
@@ -30,6 +32,7 @@ public class FavoriteResponseDto {
 
     public static FavoriteResponseDto of(Long id, Long problemId, String imageUrl, List<ConceptDto> concepts,
         String ocrResult, String llmResult, LocalDateTime createdAt) {
-        return new FavoriteResponseDto(id, problemId, imageUrl, concepts, ocrResult, llmResult, createdAt);
+        return FavoriteResponseDto.builder().id(id).problemId(problemId).imageUrl(imageUrl).concepts(concepts)
+            .ocrResult(ocrResult).llmResult(llmResult).createdAt(createdAt).build();
     }
 }
