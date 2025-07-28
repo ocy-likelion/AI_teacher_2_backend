@@ -50,7 +50,7 @@ public class ProblemService {
 
     @Transactional
     public ProblemResponseDto createProblemWithImage(Long memberId, MultipartFile file) {
-        member member = memberService.findById(memberId);
+        Member member = memberService.readMember(memberId);
 
         SupabaseResponseDto uploadDto = supabaseUploader.upload(memberId, file);
         String imageUrl = baseUrl + '/' + uploadDto.getKey();

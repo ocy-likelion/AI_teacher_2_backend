@@ -27,18 +27,18 @@ public class Problem extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member Member;
+    private Member member;
 
     @Column(nullable = true)
     private LocalDateTime activatedAt;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Problem(Member member) {
-        this.Member = Member;
+        this.member = member;
     }
 
-    public static Problem from(Member Member) {
-        return Problem.builder().Member(Member).build();
+    public static Problem from(Member member) {
+        return Problem.builder().member(member).build();
     }
 
     public void activate() {

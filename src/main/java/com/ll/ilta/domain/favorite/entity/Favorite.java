@@ -31,7 +31,7 @@ public class Favorite extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private member member;
+    private Member member;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Favorite(Problem problem, Member member) {

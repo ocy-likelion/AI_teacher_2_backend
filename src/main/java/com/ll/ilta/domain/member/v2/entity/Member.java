@@ -1,9 +1,6 @@
 package com.ll.ilta.domain.member.v2.entity;
 
-
-import static com.ll.ilta.domain.member.v2.entity.QMember.member;
-
-import com.ll.ilta.global.common.BaseEntity;
+import com.ll.ilta.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
