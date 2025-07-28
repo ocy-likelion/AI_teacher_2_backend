@@ -17,6 +17,8 @@ public class MemberRequestDTO {
         private String email;
         private String password;
         private String role;
+        @Schema(description = "프로필 이미지 URL", example = "https://image.com/profile.jpg")
+        private String profileImageUrl;
     }
 
     @Getter
@@ -30,6 +32,8 @@ public class MemberRequestDTO {
 
         private String email;
         private String password;
+        @Schema(description = "인가 코드", example = "xxxxx")
+        private String code;
     }
 
     @Getter

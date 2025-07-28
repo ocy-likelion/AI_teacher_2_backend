@@ -37,8 +37,8 @@ public class AuthController {
     @GetMapping("/oauth") // Redirect URI
     public BaseResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode,
         HttpServletResponse httpServletResponse) {
-        Member member = authService.oAuthLogin(accessCode, httpServletResponse);
-        return BaseResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
+        MemberResponseDTO.JoinResultDTO result = authService.oAuthLogin(accessCode, httpServletResponse);
+        return BaseResponse.onSuccess(result);
     }
 
 }

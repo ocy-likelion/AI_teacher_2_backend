@@ -22,8 +22,8 @@ public class BaseResponse<T> {
 
     // 성공한 경우 응답 생성
 
-    public static <T> BaseResponse<T> onSuccess(T result) {
-        return new BaseResponse<>(true, SuccessStatus.OK.getCode(), SuccessStatus.OK.getMessage(), result);
+    public static <T> BaseResponse<T> onSuccess(T data) {
+        return new BaseResponse<>(true, "COMMON200", "성공입니다.", data);
     }
 
     public static <T> BaseResponse<T> of(BaseCode code, T result) {
