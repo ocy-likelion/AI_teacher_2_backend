@@ -7,8 +7,8 @@ import com.ll.ilta.domain.image.dto.SupabaseResponseDto;
 import com.ll.ilta.domain.image.entity.Image;
 import com.ll.ilta.domain.image.repository.ImageRepository;
 import com.ll.ilta.domain.image.service.SupabaseUploader;
-import com.ll.ilta.domain.member.v1.entity.Member;
-import com.ll.ilta.domain.member.v1.service.MemberService;
+import com.ll.ilta.domain.member.v2.entity.Member;
+import com.ll.ilta.domain.member.v2.service.MemberService;
 import com.ll.ilta.domain.concept.dto.ConceptDto;
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.entity.Problem;
@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ProblemService {
 
-    private static final String PROBLEMS_LIST_URL = "/api/v1/problem/list";
+    private static final String PROBLEMS_LIST_URL = "/api/v2/problem/list";
 
     private final MemberService memberService;
     private final SupabaseUploader supabaseUploader;
@@ -49,10 +49,10 @@ public class ProblemService {
     private String baseUrl;
 
     @Transactional
-    public ProblemResponseDto createProblemWithImage(Long userId, MultipartFile file) {
-        Member member = memberService.findById(userId);
+    public ProblemResponseDto createProblemWithImage(Long memberId, MultipartFile file) {
+        Member member = memberService.readMember(memberId);
 
-        SupabaseResponseDto uploadDto = supabaseUploader.upload(userId, file);
+        SupabaseResponseDto uploadDto = supabaseUploader.upload(memberId, file);
         String imageUrl = baseUrl + '/' + uploadDto.getKey();
 
         Problem problem = problemRepository.save(Problem.from(member));

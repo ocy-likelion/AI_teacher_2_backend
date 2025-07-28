@@ -2,6 +2,11 @@ server:
   port: ${PORT:10000}   # Render 기본 포트
   address: 0.0.0.0
 
+kakao:
+  auth:
+    client: ${KAKAO_CLIENT_ID}
+    redirect: ${KAKAO_REDIRECT_URL}
+
 custom:
   site:
     name: "ilta_prod"
