@@ -17,6 +17,9 @@ public class MemberResponseDTO {
     public static class JoinResultDTO {
 
         private Long memberId;
+        private String nickname;
+        private String email;
+        private String accessToken;
         private LocalDateTime createAt;
     }
 
@@ -56,10 +59,10 @@ public class MemberResponseDTO {
         @Schema(description = "자녀 학년", example = "3")
         private Integer childGrade;
 
-        @Schema(description = "등록일", example = "2025-07-26T12:00:00")
-        private LocalDateTime createdAt;
-
         @Schema(description = "수정일", example = "2025-07-26T12:10:00")
         private LocalDateTime updatedAt;
+
+        @Schema(description = "등록일", example = "2025-07-26T12:00:00")
+        private LocalDateTime createdAt;
     }
 }

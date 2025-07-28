@@ -1,6 +1,8 @@
 package com.ll.ilta.domain.member.v2.entity;
 
 
+import static com.ll.ilta.domain.member.v2.entity.QMember.member;
+
 import com.ll.ilta.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +15,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,6 +45,8 @@ public class Member extends BaseEntity {
 
     public void updateMemberInfo(String nickname) {
        this.nickname=nickname;
+        log.info("Updated member info => id: {}, nickname: {}", this.id, this.nickname);
+
     }
 
 }

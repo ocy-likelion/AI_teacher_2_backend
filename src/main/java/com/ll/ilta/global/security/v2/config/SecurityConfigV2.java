@@ -35,7 +35,6 @@ public class SecurityConfigV2 {
     private final PrincipalDetailsService principalDetailsService;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    // PasswordEncoerder Been
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -2,6 +2,8 @@ package com.ll.ilta.domain.member.v2.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.ilta.domain.member.v2.converter.MemberConverter;
 import com.ll.ilta.domain.member.v2.dto.request.MemberRequestDTO;
 import com.ll.ilta.domain.member.v2.dto.response.MemberResponseDTO;
@@ -19,7 +21,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,9 +37,24 @@ public class MemberController {
     @GetMapping("/me/profile")
     public BaseResponse<MemberResponseDTO.MemberPreviewDTO> readMember(
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
         Long memberId = principalDetails.getMemberId();
+        System.out.println(">>>> memberId: " + memberId);
+
         Member member = memberService.readMember(memberId);
-        return BaseResponse.onSuccess(MemberConverter.toMemberPreviewDTO(member));
+        System.out.println(">>>> memberService result: " + member);
+
+        MemberResponseDTO.MemberPreviewDTO dto = MemberConverter.toMemberPreviewDTO(member);
+        System.out.println(">>>> 컨트롤러 result 객체 확인: " + dto);
+
+        try {
+            String json = new ObjectMapper().writeValueAsString(dto);
+            System.out.println(">>>> 직렬화된 JSON: " + json);
+        } catch (JsonProcessingException e) {
+            System.out.println(">>>> JSON 직렬화 실패: " + e.getMessage());
+        }
+
+        return BaseResponse.onSuccess(dto);
     }
 
     @Operation(summary = "[관리자 전용] 전체 회원 조회", description = "관리자 기능이라 추후 구현 예정")
