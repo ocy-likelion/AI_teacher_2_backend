@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.favorite.entity;
 
-import com.ll.ilta.domain.member.v1.entity.Member;
+import com.ll.ilta.domain.member.v2.entity.Member;
 import com.ll.ilta.domain.problem.entity.Problem;
 import com.ll.ilta.global.jpa.BaseTimeEntity;
 import jakarta.persistence.Entity;

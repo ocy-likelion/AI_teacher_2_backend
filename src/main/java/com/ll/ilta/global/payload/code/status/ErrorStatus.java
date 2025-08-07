@@ -1,0 +1,55 @@
+package com.ll.ilta.global.payload.code.status;
+
+import com.ll.ilta.global.payload.code.BaseErrorCode;
+import com.ll.ilta.global.payload.code.ErrorReasonDTO;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@AllArgsConstructor
+public enum ErrorStatus implements BaseErrorCode {
+    // 기본 에러
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 에러, 관리자에게 문의 바랍니다."),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "잘못된 요청입니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
+
+    // user 에러
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "USER400", "user를 찾을 수 없습니다."),
+
+    // token 에러
+    AUTH_EXPIRE_TOKEN(HttpStatus.UNAUTHORIZED, "TOKEN401_0", "토큰이 만료되었습니다."),
+    AUTH_INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "TOKEN401_1", "토큰이 부적절합니다."),
+    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "TOKEN404_0", "토큰이 존재하지 않습니다."),
+
+    // 인증관련
+    AUTHENTICATION_FAILED(HttpStatus.UNAUTHORIZED, "AUTH401_0", "인증에 실패했습니다."),
+    BAD_CREDENTIALS(HttpStatus.UNAUTHORIZED, "AUTH401_1", "비밀번호를 잘못 입력했습니다."),
+    ACCOUNT_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH401_4", "아이디를 잘못 입력했습니다. 회원가입 후 이용해주세요."),
+
+    // 파싱 에러
+    PARSING_ERROR(HttpStatus.BAD_REQUEST, "PARSE400", "데이터 파싱 중 오류가 발생했습니다."),
+
+    // problem 에러
+    NOT_FOUND_PROBLEM(HttpStatus.NOT_FOUND, "PROBLEM404", "문제를 찾을 수 없습니다.");
+    private final HttpStatus httpStatus;
+    private final String code;
+    private final String message;
+
+    @Override
+    public ErrorReasonDTO getReason() {
+        return ErrorReasonDTO.builder().message(message).code(code).isSuccess(false).build();
+    }
+
+    @Override
+    public ErrorReasonDTO getReasonHttpStatus() {
+        return ErrorReasonDTO.builder()
+            .message(message)
+            .code(code)
+            .isSuccess(false)
+            .httpStatus(httpStatus)
+            .build();
+    }
+
+}
