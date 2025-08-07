@@ -17,13 +17,13 @@ public class SupabaseUploader {
     @Value("${supabase.bucket}")
     private String bucket;
 
-    public SupabaseResponseDto upload(Long userId, MultipartFile file) {
+    public SupabaseResponseDto upload(Long memberId, MultipartFile file) {
         String extension = "";
         if (file.getOriginalFilename() != null && file.getOriginalFilename().contains(".")) {
             extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         }
         String uniqueFilename = UUID.randomUUID().toString() + extension;
-        String path = userId + "/" + uniqueFilename;
+        String path = memberId + "/" + uniqueFilename;
 
         return supabaseFeignClient.uploadImage(bucket, path, file);
     }

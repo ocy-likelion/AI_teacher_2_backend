@@ -1,6 +1,12 @@
 server:
   port: 8080
 
+kakao:
+  auth:
+    client: ${KAKAO_CLIENT_ID}
+    clientSecret: ${KAKAO_CLIENT_SECRET}
+    redirect: ${KAKAO_REDIRECT_URL}
+
 custom:
   site:
     name: "ilta_dev"
