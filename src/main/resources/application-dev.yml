@@ -23,3 +23,11 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   expiration: 3600000
+
+logging:
+  level:
+    org.springframework.cloud.openfeign: DEBUG
+
+ai:
+  service:
+    url: ${AI_SERVICE_URL}

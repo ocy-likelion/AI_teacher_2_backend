@@ -1,47 +1,130 @@
 package com.ll.ilta.domain.problem.service;
 
-import com.ll.ilta.domain.problem.dto.ProblemDto;
-
-import com.ll.ilta.domain.problem.repository.FavoriteRepository;
+import com.ll.ilta.domain.favorite.repository.FavoriteRepository;
+import com.ll.ilta.domain.image.client.AiFeignClient;
+import com.ll.ilta.domain.image.dto.AiResponseDto;
+import com.ll.ilta.domain.image.dto.SupabaseResponseDto;
+import com.ll.ilta.domain.image.entity.Image;
+import com.ll.ilta.domain.image.repository.ImageRepository;
+import com.ll.ilta.domain.image.service.SupabaseUploader;
+import com.ll.ilta.domain.member.v1.entity.Member;
+import com.ll.ilta.domain.member.v1.service.MemberService;
+import com.ll.ilta.domain.concept.dto.ConceptDto;
+import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
+import com.ll.ilta.domain.problem.entity.Problem;
+import com.ll.ilta.domain.problem.entity.ProblemConcept;
+import com.ll.ilta.domain.problem.entity.ProblemResult;
+import com.ll.ilta.domain.problem.repository.ProblemConceptRepository;
 import com.ll.ilta.domain.problem.repository.ProblemRepository;
+import com.ll.ilta.domain.problem.repository.ProblemResultRepository;
+import com.ll.ilta.domain.concept.entity.Concept;
+import com.ll.ilta.domain.concept.repository.ConceptRepository;
 import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
 import com.ll.ilta.global.common.service.CursorUtil;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
 public class ProblemService {
-    private final ProblemRepository problemRepository;
-    private final FavoriteRepository favoriteRepository;
+
     private static final String PROBLEMS_LIST_URL = "/api/v1/problem/list";
 
-    public CursorPaginatedResponseDto<ProblemDto> getProblemList(Long childId, int limit, String afterCursor) {
-        List<ProblemDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit+1);
+    private final MemberService memberService;
+    private final SupabaseUploader supabaseUploader;
+    private final AiFeignClient aiFeignClient;
+    private final ProblemRepository problemRepository;
+    private final ProblemResultRepository problemResultRepository;
+    private final ImageRepository imageRepository;
+    private final FavoriteRepository favoriteRepository;
+    private final ConceptRepository conceptRepository;
+    private final ProblemConceptRepository problemConceptRepository;
+
+    @Value("${supabase.image-base-url}")
+    private String baseUrl;
+
+    @Transactional
+    public ProblemResponseDto createProblemWithImage(Long userId, MultipartFile file) {
+        Member member = memberService.findById(userId);
+
+        SupabaseResponseDto uploadDto = supabaseUploader.upload(userId, file);
+        String imageUrl = baseUrl + '/' + uploadDto.getKey();
+
+        Problem problem = problemRepository.save(Problem.from(member));
+
+        AiResponseDto aiResponseDto = aiFeignClient.sendImageToAiServer(file);
+
+        List<Concept> savedConcepts = aiResponseDto.getConceptTags().stream().map(
+                tag -> conceptRepository.findByName(tag.getName())
+                    .orElseGet(() -> conceptRepository.save(Concept.of(tag.getName(), tag.getDescription()))))
+            .collect(Collectors.toList());
+
+        List<ConceptDto> conceptDtos = savedConcepts.stream()
+            .map(concept -> ConceptDto.of(concept.getId(), concept.getName())).toList();
+
+        ProblemResult result = ProblemResult.of(aiResponseDto.getOcrResult(), aiResponseDto.getSummary(),
+            aiResponseDto.getExplanation(), true, problem);
+        problemResultRepository.save(result);
+
+        if (Boolean.TRUE.equals(result.getStatus()) && !problem.isActivated()) {
+            problem.activate();
+            problemRepository.save(problem);
+        }
+
+        List<ProblemConcept> problemConcepts = createProblemConcepts(problem, savedConcepts);
+        problemConceptRepository.saveAll(problemConcepts);
+
+        Image image = imageRepository.save(Image.of(imageUrl, problem));
+
+        return ProblemResponseDto.of(problem.getId(), image.getImageUrl(), conceptDtos, false, result.getOcrResult(),
+            result.getSummary(), result.getExplanation(), problem.getActivatedAt());
+    }
+
+    public List<ProblemConcept> createProblemConcepts(Problem problem, List<Concept> concepts) {
+        return concepts.stream().map(concept -> ProblemConcept.of(problem, concept)).toList();
+    }
+
+    public CursorPaginatedResponseDto<ProblemResponseDto> getProblemList(Long childId, int limit, String afterCursor) {
+        List<ProblemResponseDto> problems = problemRepository.findProblemWithCursor(childId, afterCursor, limit + 1);
 
         if (problems.isEmpty()) {
-            return CursorPaginatedResponseDto.of(problems, limit, false, null,
-                buildSelfUrl(limit, afterCursor), null);
+            return CursorPaginatedResponseDto.of(problems, limit, false, null, buildSelfUrl(limit, afterCursor), null);
         }
 
         boolean hasNextPage = problems.size() > limit;
-        if (hasNextPage) {
-            problems = problems.subList(0, limit);
-        }
 
         String nextCursor = null;
         if (hasNextPage) {
-            ProblemDto lastProblem = problems.get(problems.size() - 1);
-            nextCursor = CursorUtil.encodeCursor(lastProblem.getId(), lastProblem.getCreatedAt());
+            ProblemResponseDto lastItem = problems.get(limit - 1); // 현재 페이지 마지막
+            nextCursor = CursorUtil.encodeCursor(lastItem.getId(), lastItem.getActivatedAt());
+        }
+
+        if (hasNextPage) {
+            problems = problems.subList(0, limit);
         }
 
         String selfUrl = buildSelfUrl(limit, afterCursor);
         String nextUrl = hasNextPage ? buildNextUrl(limit, nextCursor) : null;
 
         return CursorPaginatedResponseDto.of(problems, limit, hasNextPage, nextCursor, selfUrl, nextUrl);
+    }
 
+    public ProblemResponseDto getProblemDetail(Long problemId) {
+        return problemRepository.findProblemById(problemId);
+    }
+
+    @Transactional
+    public void deleteProblem(Long problemId) {
+        favoriteRepository.deleteByProblemId(problemId);
+        imageRepository.deleteByProblemId(problemId);
+        problemResultRepository.deleteByProblemId(problemId);
+        problemConceptRepository.deleteByProblemId(problemId);
+        problemRepository.deleteById(problemId);
     }
 
     private String buildSelfUrl(int limit, String afterCursor) {
@@ -55,15 +138,4 @@ public class ProblemService {
     private String buildNextUrl(int limit, String nextCursor) {
         return PROBLEMS_LIST_URL + "?limit=" + limit + "&after_cursor=" + nextCursor;
     }
-
-    public ProblemDto getProblemDetail(Long problemId) {
-        return problemRepository.findProblemById(problemId);
-    }
-
-    @Transactional
-    public void deleteProblem(Long problemId) {
-        favoriteRepository.deleteByProblemId(problemId);
-        problemRepository.deleteById(problemId);
-    }
 }
-

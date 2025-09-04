@@ -27,7 +27,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
         // 로그인 경로 및 인증 안 필요한 경로는 토큰 검사 안 함
-        if (path.equals("/api/v1/member/login") || path.equals("/api/v1/member/register")) {
+        if (path.equals("/api/v1/member/login")
+            || path.equals("/api/v1/member/register")
+            || path.equals("/api/v1/image/upload")) { // TODO: 이미지 업로드 JWT 포함 후 삭제 예정
             filterChain.doFilter(request, response);
             return;
         }
