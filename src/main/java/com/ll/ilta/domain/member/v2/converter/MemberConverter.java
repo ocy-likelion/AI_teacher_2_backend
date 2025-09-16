@@ -10,10 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Slf4j
 public class MemberConverter {
 
-    public static Member toMember(MemberRequestDTO.JoinDTO joinDTO, PasswordEncoder passwordEncoder) {
+    public static Member toMember(MemberRequestDTO.JoinDTO joinDTO) {
         return Member.builder()
             .nickname(joinDTO.getNickname())
-            .password(passwordEncoder.encode(joinDTO.getPassword()))
             .email(joinDTO.getEmail())
             .role(joinDTO.getRole())
             .build();

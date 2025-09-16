@@ -41,9 +41,7 @@ public class AuthServiceImpl implements AuthService {
             return MemberConverter.toJoinResultDTO(member, token);
         } else {
             Member member = AuthConverter.toMember(kakaoProfile.getKakao_account().getEmail(),
-                kakaoProfile.getKakao_account().getProfile().getNickname(),
-                "1234",
-                passwordEncoder);
+                kakaoProfile.getKakao_account().getProfile().getNickname());
             memberRepository.save(member);
 
             String token = jwtUtil.createAccessToken(member.getEmail(), member.getRole());

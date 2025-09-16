@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +36,7 @@ public class AuthController {
         description = "로그인 성공",
         content = @Content(schema = @Schema(implementation = MemberResponseDTO.JoinResultDTO.class))
     )
-    @GetMapping("/oauth") // Redirect URI
+    @PostMapping("/oauth") // Redirect URI
     public BaseResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode,
         HttpServletResponse httpServletResponse) {
         MemberResponseDTO.JoinResultDTO result = authService.oAuthLogin(accessCode, httpServletResponse);
