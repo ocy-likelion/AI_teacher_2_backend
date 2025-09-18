@@ -36,7 +36,7 @@ public class AuthController {
         description = "로그인 성공",
         content = @Content(schema = @Schema(implementation = MemberResponseDTO.JoinResultDTO.class))
     )
-    @PostMapping("/oauth") // Redirect URI
+    @GetMapping("/oauth") // Redirect URI
     public BaseResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode,
         HttpServletResponse httpServletResponse) {
         MemberResponseDTO.JoinResultDTO result = authService.oAuthLogin(accessCode, httpServletResponse);
