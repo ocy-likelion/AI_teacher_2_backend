@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ProblemService {
 
-    private static final String PROBLEMS_LIST_URL = "/api/v2/problem/list";
+    private static final String PROBLEMS_LIST_URL = "/api/v2/problems/list";
 
     private final MemberService memberService;
     private final SupabaseUploader supabaseUploader;

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "MemberV1Controller", description = "회원 및 자녀 API")
 @RestController
-@RequestMapping(value = "/api/v1/member", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/members", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class MemberV1Controller {
 
