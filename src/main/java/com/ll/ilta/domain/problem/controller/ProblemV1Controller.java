@@ -4,8 +4,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.service.ProblemService;
-import com.ll.ilta.global.common.dto.CursorPaginatedResponseDto;
-import com.ll.ilta.global.security.v2.member.PrincipalDetails;
+import com.ll.ilta.global.cursor.dto.CursorPaginatedResponseDto;
+import com.ll.ilta.global.security.member.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
