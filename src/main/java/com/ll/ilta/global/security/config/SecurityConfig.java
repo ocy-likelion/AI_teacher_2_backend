@@ -2,7 +2,6 @@ package com.ll.ilta.global.security.config;
 
 import com.ll.ilta.global.security.common.JwtAccessDeniedHandler;
 import com.ll.ilta.global.security.common.JwtExceptionFilter;
-import com.ll.ilta.global.security.common.SecurityConstants;
 import com.ll.ilta.global.security.auth.CustomDaoAuthenticationProvider;
 import com.ll.ilta.global.security.auth.LoginFilter;
 import com.ll.ilta.global.security.jwt.JwtFilter;
