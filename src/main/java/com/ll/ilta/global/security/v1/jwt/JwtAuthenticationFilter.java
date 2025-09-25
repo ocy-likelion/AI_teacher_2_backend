@@ -24,8 +24,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final List<String> ALLOW_URLS = List.of(
         "/auth/login/kakao",
-        "/api/v1/member/register",
-        "/api/v1/image/upload"  // TODO: 이미지 업로드 JWT 포함 후 삭제 예정
+        "/api/v1/members/register",
+        "/api/v1/images/upload"  // TODO: 이미지 업로드 JWT 포함 후 삭제 예정
     );
 
     @Override

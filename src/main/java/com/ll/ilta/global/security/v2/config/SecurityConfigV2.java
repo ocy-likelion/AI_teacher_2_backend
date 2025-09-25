@@ -98,10 +98,10 @@ public class SecurityConfigV2 {
             .requestMatchers(HttpMethod.GET, "/api/v2/oauth").permitAll()
 
             // ✅ 로그인 사용자 (USER, ADMIN)
-            .requestMatchers(HttpMethod.GET, "/api/v1/concept").hasAnyRole("USER", "ADMIN")
-            .requestMatchers(HttpMethod.GET, "/api/v1/favorite/list").hasAnyRole("USER", "ADMIN")
-            .requestMatchers(HttpMethod.POST, "/api/v1/favorite").hasAnyRole("USER", "ADMIN")
-            .requestMatchers(HttpMethod.POST, "/api/v1/image/upload").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.GET, "/api/v1/concepts").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.GET, "/api/v1/favorites/list").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.POST, "/api/v1/favorites").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.POST, "/api/v1/images/upload").hasAnyRole("USER", "ADMIN")
 
             .requestMatchers(HttpMethod.GET, "/api/v2/members/me/profile").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.PATCH, "/api/v2/members/me/profile").hasAnyRole("USER", "ADMIN")
