@@ -2,7 +2,7 @@ package com.ll.ilta.global.security.jwt;
 
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
 import com.ll.ilta.global.payload.exception.handler.AuthHandler;
-import com.ll.ilta.global.security.common.SecurityConstants;
+import com.ll.ilta.global.security.config.SecurityConstants;
 import com.ll.ilta.global.security.member.PrincipalDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -53,7 +53,6 @@ public class JwtFilter extends OncePerRequestFilter {
                         userDetails, "", userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 log.info("[JwtFilter] SecurityContextHolder에 인증 객체 설정 완료 ✅");
-                log.info("[JwtFilter] 필터 실행됨 ✅");
             } else {
                 throw new AuthHandler(ErrorStatus.NOT_FOUND_USER);
             }
@@ -61,5 +60,6 @@ public class JwtFilter extends OncePerRequestFilter {
             throw new AuthHandler(ErrorStatus.AUTH_INVALID_TOKEN);
         }
 
+        filterChain.doFilter(request, response);
     }
 }

@@ -28,8 +28,9 @@ public enum ErrorStatus implements BaseErrorCode {
     BAD_CREDENTIALS(HttpStatus.UNAUTHORIZED, "AUTH401_1", "비밀번호를 잘못 입력했습니다."),
     ACCOUNT_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH401_4", "아이디를 잘못 입력했습니다. 회원가입 후 이용해주세요."),
 
-    // 파싱 에러
-    PARSING_ERROR(HttpStatus.BAD_REQUEST, "PARSE400", "데이터 파싱 중 오류가 발생했습니다."),
+    // Kakao 관련 에러
+    KAKAO_PARSING_ERROR(HttpStatus.BAD_REQUEST, "KAKAO400", "카카오 응답 데이터 파싱 중 오류가 발생했습니다."),
+    KAKAO_REQUEST_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "KAKAO500", "카카오 토큰 요청/처리 중 오류가 발생했습니다."),
 
     // problem 에러
     NOT_FOUND_PROBLEM(HttpStatus.NOT_FOUND, "PROBLEM404", "문제를 찾을 수 없습니다.");
