@@ -1,5 +1,6 @@
 package com.ll.ilta.domain.member.entity;
 
+import com.ll.ilta.domain.member.dto.MemberRequestDTO.ChildDTO;
 import com.ll.ilta.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,8 +42,12 @@ public class Member extends BaseEntity {
 
     private Integer childGrade;
 
-    public void updateMemberInfo(String nickname) {
+    public void updateMember(String nickname) {
         this.nickname = nickname;
-        log.info("Updated member info => id: {}, nickname: {}", this.id, this.nickname);
+    }
+
+    public void updateChild(ChildDTO childDTO) {
+        this.childName = childDTO.getChildName();
+        this.childGrade = childDTO.getChildGrade();
     }
 }

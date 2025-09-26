@@ -85,7 +85,8 @@ public class JwtUtil {
             //Date now = new Date();
             return expiredDate.after(new Date()); //now
         } catch (ExpiredJwtException e) {
-            log.warn("[JWT] 만료된 토큰 ❌ | 앞 10자리: {} | 에러: {}", token.substring(0, Math.min(10, token.length())), e.getMessage());
+            log.warn("[JWT] 만료된 토큰 ❌ | 앞 10자리: {} | 에러: {}", token.substring(0, Math.min(10, token.length())),
+                e.getMessage());
             log.info("[*] _AUTH_EXPIRE_TOKEN");
 
             throw new AuthHandler(ErrorStatus.AUTH_EXPIRE_TOKEN);
@@ -94,7 +95,8 @@ public class JwtUtil {
                  | IllegalArgumentException
                  | MalformedJwtException
                  | UnsupportedJwtException e) {
-            log.warn("[JWT] 유효하지 않은 토큰 ❌ | 앞 10자리: {} | 에러: {}", token.substring(0, Math.min(10, token.length())), e.getMessage());
+            log.warn("[JWT] 유효하지 않은 토큰 ❌ | 앞 10자리: {} | 에러: {}", token.substring(0, Math.min(10, token.length())),
+                e.getMessage());
             log.info("[*] AUTH_INVALID_TOKEN");
             throw new AuthHandler(ErrorStatus.AUTH_INVALID_TOKEN);
         }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.ilta.domain.member.converter.MemberConverter;
 import com.ll.ilta.domain.member.dto.MemberRequestDTO;
 import com.ll.ilta.domain.member.dto.MemberResponseDTO;
+import com.ll.ilta.domain.member.dto.MemberResponseDTO.ChildDTO;
 import com.ll.ilta.domain.member.entity.Member;
 import com.ll.ilta.domain.member.service.MemberService;
 import com.ll.ilta.global.payload.response.BaseResponse;
@@ -39,13 +40,10 @@ public class MemberController {
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Long memberId = principalDetails.getMemberId();
-        System.out.println(">>>> memberId: " + memberId);
 
         Member member = memberService.readMember(memberId);
-        System.out.println(">>>> memberService result: " + member);
 
         MemberResponseDTO.MemberPreviewDTO dto = MemberConverter.toMemberPreviewDTO(member);
-        System.out.println(">>>> 컨트롤러 result 객체 확인: " + dto);
 
         try {
             String json = new ObjectMapper().writeValueAsString(dto);
@@ -74,6 +72,27 @@ public class MemberController {
         return BaseResponse.onSuccess(MemberConverter.toMemberPreviewDTO(member));
     }
 
+    @Operation(summary = "자녀 정보 조회", description = "자녀 이름 학년 조회")
+    @GetMapping("/child/profile")
+    public BaseResponse<ChildDTO> readChild(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        Long memberId = principalDetails.getMemberId();
+        Member member = memberService.readMember(memberId);
+
+        ChildDTO childDTO = MemberConverter.toChildDto(member);
+
+        return BaseResponse.onSuccess(childDTO);
+    }
+
+    @Operation(summary = "자녀 정보 수정", description = "자녀 이름, 학년 수정")
+    @PatchMapping("/child/profile")
+    public BaseResponse<ChildDTO> updateChild(@AuthenticationPrincipal PrincipalDetails principalDetails,
+        @RequestBody MemberRequestDTO.ChildDTO childDTO) {
+        Long memberId = principalDetails.getMemberId();
+        Member member = memberService.updateChild(childDTO, memberId);
+        return BaseResponse.onSuccess(MemberConverter.toChildDto(member));
+    }
+
 //    @Operation(summary = "카카오 로그아웃", description = "카카오 토큰 연동 해제")
 //    @PostMapping("/logout")
 //    public BaseResponse<String> kakaoLogout(@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -90,18 +109,13 @@ public class MemberController {
     }
 
 
-    @Operation(
-        summary = "자녀 정보 유무 확인",
-        description = "카카오 로그인 후 자녀 이름과 학년 유무를 체크하여 홈 화면 이동 판단"
-    )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "자녀 정보 존재 여부 반환"),
-        @ApiResponse(responseCode = "401", description = "인증 실패")
-    })
+    @Operation(summary = "자녀 정보 유무 확인", description = "카카오 로그인 후 자녀 이름과 학년 유무를 체크하여 홈 화면 이동 판단")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "자녀 정보 존재 여부 반환"),
+        @ApiResponse(responseCode = "401", description = "인증 실패")})
     @GetMapping("/me/child-info/exist")
     public BaseResponse<Boolean> existsChildInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
-        boolean hasChild = memberService.existsChildInfo(memberId);
+        boolean hasChild = memberService.existsChild(memberId);
         return BaseResponse.onSuccess(hasChild);
     }
 }

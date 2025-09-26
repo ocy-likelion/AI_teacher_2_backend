@@ -48,21 +48,15 @@ public class MemberResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ChildInfoDTO {
+    public static class ChildDTO {
 
-        @Schema(description = "자녀 ID", example = "2")
-        private Long childId;
+        @Schema(description = "회원 ID(회원-자녀 일대일)", example = "2")
+        private Long memberId;
 
         @Schema(description = "자녀 이름", example = "홍길동")
         private String childName;
 
         @Schema(description = "자녀 학년", example = "3")
         private Integer childGrade;
-
-        @Schema(description = "수정일", example = "2025-07-26T12:10:00")
-        private LocalDateTime updatedAt;
-
-        @Schema(description = "등록일", example = "2025-07-26T12:00:00")
-        private LocalDateTime createdAt;
     }
 }
