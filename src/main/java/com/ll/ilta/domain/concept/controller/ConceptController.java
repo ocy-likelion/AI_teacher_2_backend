@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "ConceptV1Controller", description = "개념 관련 API")
-@RequestMapping(value = "/api/v1/concepts", produces = APPLICATION_JSON_VALUE)
+@Tag(name = "ConceptController", description = "개념 관련 API")
+@RequestMapping(value = "/api/v2/concepts", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @RestController
-public class ConceptV1Controller {
+public class ConceptController {
 
     private final ConceptService conceptService;
 

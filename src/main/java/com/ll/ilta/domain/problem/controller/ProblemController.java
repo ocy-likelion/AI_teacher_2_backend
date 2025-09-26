@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "ProblemV1Controller", description = "문제와 관련된 CRUD 작업을 수행하는 API")
+@Tag(name = "ProblemController", description = "문제와 관련된 CRUD 작업을 수행하는 API")
 @RequestMapping(value = "/api/v2/problems", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @RestController
-public class ProblemV1Controller {
+public class ProblemController {
 
     private final ProblemService problemService;
 

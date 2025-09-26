@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Tag(name = "ImageV1Controller", description = "이미지 업로드 및 문제/해설 생성 API")
-@RequestMapping("/api/v1/images")
+@Tag(name = "ImageController", description = "이미지 업로드 및 문제/해설 생성 API")
+@RequestMapping("/api/v2/images")
 @RequiredArgsConstructor
 @RestController
-public class ImageV1Controller {
+public class ImageController {
 
     private final ProblemService problemService;
 
