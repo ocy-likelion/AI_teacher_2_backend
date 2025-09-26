@@ -48,15 +48,12 @@ public class MemberResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ChildDTO {
+    public static class ChildResponseDTO {
 
         @Schema(description = "회원 ID(회원-자녀 일대일)", example = "2")
         private Long memberId;
 
-        @Schema(description = "자녀 이름", example = "홍길동")
         private String childName;
-
-        @Schema(description = "자녀 학년", example = "3")
         private Integer childGrade;
     }
 }

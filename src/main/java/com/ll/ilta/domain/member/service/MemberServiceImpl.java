@@ -1,8 +1,7 @@
 package com.ll.ilta.domain.member.service;
 
-
-import com.ll.ilta.domain.member.dto.MemberRequestDTO;
-import com.ll.ilta.domain.member.dto.MemberRequestDTO.ChildDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO.ChildRequestDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO.UpdateMemberDTO;
 import com.ll.ilta.domain.member.entity.Member;
 import com.ll.ilta.domain.member.repository.MemberRepository;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
@@ -22,8 +21,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     private Member findMemberOrThrow(Long memberId) {
-        return memberRepository.findById(memberId)
-            .orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
+        return memberRepository.findById(memberId).orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
     }
 
     @Transactional(readOnly = true)
@@ -52,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateMyInfo(MemberRequestDTO.UpdateMemberDTO updateMemberDTO, Long memberId) {
+    public Member updateMyInfo(UpdateMemberDTO updateMemberDTO, Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
 
@@ -61,11 +59,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateChild(ChildDTO childDTO, Long memberId) {
+    public Member updateChild(ChildRequestDTO childRequestDTO, Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
 
-        member.updateChild(childDTO);
+        member.updateChild(childRequestDTO.getChildName(), childRequestDTO.getChildGrade());
         return member;
     }
 }

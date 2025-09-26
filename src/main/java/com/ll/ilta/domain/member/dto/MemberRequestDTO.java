@@ -39,7 +39,7 @@ public class MemberRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class ChildDTO {
+    public static class ChildRequestDTO {
 
         @Schema(description = "자녀 이름", example = "홍길동")
         private String childName;
