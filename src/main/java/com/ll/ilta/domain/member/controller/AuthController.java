@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.member.controller;
 
-import com.ll.ilta.domain.member.dto.MemberResponseDTO;
+import com.ll.ilta.domain.member.dto.MemberResponseDTO.JoinResultDTO;
 import com.ll.ilta.domain.member.service.AuthService;
 import com.ll.ilta.global.payload.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,19 +23,12 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(
-        summary = "카카오 로그인",
-        description = "카카오 인가코드를 이용해 로그인 및 자동 회원가입 처리"
-    )
-    @ApiResponse(
-        responseCode = "200",
-        description = "로그인 성공",
-        content = @Content(schema = @Schema(implementation = MemberResponseDTO.JoinResultDTO.class))
-    )
+    @Operation(summary = "카카오 로그인", description = "카카오 인가코드를 이용해 로그인 및 자동 회원가입 처리")
+    @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = JoinResultDTO.class)))
     @GetMapping("/oauth") // Redirect URI
-    public BaseResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode,
+    public BaseResponse<JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode,
         HttpServletResponse httpServletResponse) {
-        MemberResponseDTO.JoinResultDTO result = authService.oAuthLogin(accessCode, httpServletResponse);
+        JoinResultDTO result = authService.oAuthLogin(accessCode, httpServletResponse);
         return BaseResponse.onSuccess(result);
     }
 

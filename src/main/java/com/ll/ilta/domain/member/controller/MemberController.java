@@ -1,12 +1,15 @@
 package com.ll.ilta.domain.member.controller;
 
+import static com.ll.ilta.domain.member.converter.MemberConverter.toChildDto;
+import static com.ll.ilta.domain.member.converter.MemberConverter.toMemberPreviewDTO;
+import static com.ll.ilta.domain.member.converter.MemberConverter.toMemberPreviewListDTO;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ll.ilta.domain.member.converter.MemberConverter;
-import com.ll.ilta.domain.member.dto.MemberRequestDTO;
-import com.ll.ilta.domain.member.dto.MemberResponseDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO.ChildRequestDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO.UpdateMemberDTO;
+import com.ll.ilta.domain.member.dto.MemberResponseDTO.ChildResponseDTO;
+import com.ll.ilta.domain.member.dto.MemberResponseDTO.MemberPreviewDTO;
+import com.ll.ilta.domain.member.dto.MemberResponseDTO.MemberPreviewListDTO;
 import com.ll.ilta.domain.member.entity.Member;
 import com.ll.ilta.domain.member.service.MemberService;
 import com.ll.ilta.global.payload.response.BaseResponse;
@@ -35,43 +38,50 @@ public class MemberController {
 
     @Operation(summary = "내 정보 조회", description = "JWT로 인증된 사용자 정보 조회")
     @GetMapping("/me/profile")
-    public BaseResponse<MemberResponseDTO.MemberPreviewDTO> readMember(
-        @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public BaseResponse<MemberPreviewDTO> readMember(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Long memberId = principalDetails.getMemberId();
-        System.out.println(">>>> memberId: " + memberId);
-
         Member member = memberService.readMember(memberId);
-        System.out.println(">>>> memberService result: " + member);
-
-        MemberResponseDTO.MemberPreviewDTO dto = MemberConverter.toMemberPreviewDTO(member);
-        System.out.println(">>>> 컨트롤러 result 객체 확인: " + dto);
-
-        try {
-            String json = new ObjectMapper().writeValueAsString(dto);
-            System.out.println(">>>> 직렬화된 JSON: " + json);
-        } catch (JsonProcessingException e) {
-            System.out.println(">>>> JSON 직렬화 실패: " + e.getMessage());
-        }
+        MemberPreviewDTO dto = toMemberPreviewDTO(member);
 
         return BaseResponse.onSuccess(dto);
     }
 
     @Operation(summary = "[관리자 전용] 전체 회원 조회", description = "관리자 기능이라 추후 구현 예정")
     @GetMapping("/admin/all")
-    public BaseResponse<MemberResponseDTO.MemberPreviewListDTO> readAllMember() {
+    public BaseResponse<MemberPreviewListDTO> readAllMember() {
         List<Member> memberList = memberService.readAllMembers();
-        return BaseResponse.onSuccess(MemberConverter.toMemberPreviewListDTO(memberList));
+        return BaseResponse.onSuccess(toMemberPreviewListDTO(memberList));
     }
 
     @Operation(summary = "회원 정보 수정", description = "이름, 프로필 사진 수정")
     @PatchMapping("/me/profile")
-    public BaseResponse<MemberResponseDTO.MemberPreviewDTO> updateMyInfo(
-        @AuthenticationPrincipal PrincipalDetails principalDetails,
-        @RequestBody MemberRequestDTO.UpdateMemberDTO updateMemberDTO) {
+    public BaseResponse<MemberPreviewDTO> updateMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,
+        @RequestBody UpdateMemberDTO updateMemberDTO) {
         Long memberId = principalDetails.getMemberId();
         Member member = memberService.updateMyInfo(updateMemberDTO, memberId);
-        return BaseResponse.onSuccess(MemberConverter.toMemberPreviewDTO(member));
+        return BaseResponse.onSuccess(toMemberPreviewDTO(member));
+    }
+
+    @Operation(summary = "자녀 정보 조회", description = "자녀 이름 학년 조회")
+    @GetMapping("/child/profile")
+    public BaseResponse<ChildResponseDTO> readChild(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        Long memberId = principalDetails.getMemberId();
+        Member member = memberService.readMember(memberId);
+
+        ChildResponseDTO childResponseDTO = toChildDto(member);
+
+        return BaseResponse.onSuccess(childResponseDTO);
+    }
+
+    @Operation(summary = "자녀 정보 수정", description = "자녀 이름, 학년 수정")
+    @PatchMapping("/child/profile")
+    public BaseResponse<ChildResponseDTO> updateChild(@AuthenticationPrincipal PrincipalDetails principalDetails,
+        @RequestBody ChildRequestDTO childRequestDTO) {
+        Long memberId = principalDetails.getMemberId();
+        Member member = memberService.updateChild(childRequestDTO, memberId);
+        return BaseResponse.onSuccess(toChildDto(member));
     }
 
 //    @Operation(summary = "카카오 로그아웃", description = "카카오 토큰 연동 해제")
@@ -90,18 +100,13 @@ public class MemberController {
     }
 
 
-    @Operation(
-        summary = "자녀 정보 유무 확인",
-        description = "카카오 로그인 후 자녀 이름과 학년 유무를 체크하여 홈 화면 이동 판단"
-    )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "자녀 정보 존재 여부 반환"),
-        @ApiResponse(responseCode = "401", description = "인증 실패")
-    })
+    @Operation(summary = "자녀 정보 유무 확인", description = "카카오 로그인 후 자녀 이름과 학년 유무를 체크하여 홈 화면 이동 판단")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "자녀 정보 존재 여부 반환"),
+        @ApiResponse(responseCode = "401", description = "인증 실패")})
     @GetMapping("/me/child-info/exist")
     public BaseResponse<Boolean> existsChildInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
-        boolean hasChild = memberService.existsChildInfo(memberId);
+        boolean hasChild = memberService.existsChild(memberId);
         return BaseResponse.onSuccess(hasChild);
     }
 }

@@ -1,7 +1,7 @@
 package com.ll.ilta.domain.member.service;
 
-
-import com.ll.ilta.domain.member.dto.MemberRequestDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO.ChildRequestDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO.UpdateMemberDTO;
 import com.ll.ilta.domain.member.entity.Member;
 import com.ll.ilta.domain.member.repository.MemberRepository;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
@@ -21,8 +21,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     private Member findMemberOrThrow(Long memberId) {
-        return memberRepository.findById(memberId)
-            .orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
+        return memberRepository.findById(memberId).orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
     }
 
     @Transactional(readOnly = true)
@@ -38,7 +37,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional(readOnly = true)
     @Override
-    public boolean existsChildInfo(Long memberId) {
+    public boolean existsChild(Long memberId) {
         Member member = findMemberOrThrow(memberId);
         return member.getChildGrade() != null && member.getChildName() != null;
     }
@@ -51,14 +50,20 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateMyInfo(MemberRequestDTO.UpdateMemberDTO updateMemberDTO, Long memberId) {
+    public Member updateMyInfo(UpdateMemberDTO updateMemberDTO, Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
-        log.info(" MemberServiceImpl-updateMyInfo: Before update: memberId={}, currentNickname={}", memberId, member.getNickname());
-        log.info("MemberServiceImpl-updateMyInfo: UpdateMemberDTO nickname: {}", updateMemberDTO.getNickname());
 
-        member.updateMemberInfo(updateMemberDTO.getNickname());
-        log.info("MemberServiceImpl-updateMyInfo: After update: memberId={}, newNickname={}", memberId, member.getNickname());
+        member.updateMember(updateMemberDTO.getNickname());
+        return member;
+    }
+
+    @Override
+    public Member updateChild(ChildRequestDTO childRequestDTO, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberHandler(ErrorStatus.NOT_FOUND_USER));
+
+        member.updateChild(childRequestDTO.getChildName(), childRequestDTO.getChildGrade());
         return member;
     }
 }

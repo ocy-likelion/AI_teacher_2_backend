@@ -1,6 +1,5 @@
 package com.ll.ilta.domain.member.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -29,10 +28,8 @@ public class MemberResponseDTO {
     @Builder
     public static class MemberPreviewDTO {
 
-        private Long memberId;
         private String nickname;
-        private LocalDateTime updateAt;
-        private LocalDateTime createAt;
+        private String email;
     }
 
     @Getter
@@ -48,21 +45,9 @@ public class MemberResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ChildInfoDTO {
+    public static class ChildResponseDTO {
 
-        @Schema(description = "자녀 ID", example = "2")
-        private Long childId;
-
-        @Schema(description = "자녀 이름", example = "홍길동")
         private String childName;
-
-        @Schema(description = "자녀 학년", example = "3")
         private Integer childGrade;
-
-        @Schema(description = "수정일", example = "2025-07-26T12:10:00")
-        private LocalDateTime updatedAt;
-
-        @Schema(description = "등록일", example = "2025-07-26T12:00:00")
-        private LocalDateTime createdAt;
     }
 }

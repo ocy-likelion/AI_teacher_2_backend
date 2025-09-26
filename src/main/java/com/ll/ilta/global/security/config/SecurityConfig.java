@@ -77,6 +77,8 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET, "/api/v2/members/me/profile").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.PATCH, "/api/v2/members/me/profile").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/api/v2/members/me/profile").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.GET, "/api/v2/members/child/profile").hasAnyRole("USER", "ADMIN")
+            .requestMatchers(HttpMethod.PATCH, "/api/v2/members/child/profile").hasAnyRole("USER", "ADMIN")
             .requestMatchers(HttpMethod.GET, "/api/v2/members/me/child-info/exist").hasAnyRole("USER", "ADMIN")
 
             .requestMatchers(HttpMethod.POST, "/api/v2/members/{memberId}/posts").hasAnyRole("USER", "ADMIN")

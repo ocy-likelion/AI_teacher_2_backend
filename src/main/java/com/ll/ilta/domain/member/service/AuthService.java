@@ -5,5 +5,5 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
 
-    MemberResponseDTO.JoinResultDTO  oAuthLogin(String accessCode, HttpServletResponse httpServletResponse);
+    MemberResponseDTO.JoinResultDTO oAuthLogin(String accessCode, HttpServletResponse httpServletResponse);
 }

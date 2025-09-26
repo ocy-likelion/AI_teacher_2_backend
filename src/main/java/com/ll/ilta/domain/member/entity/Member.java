@@ -41,8 +41,12 @@ public class Member extends BaseEntity {
 
     private Integer childGrade;
 
-    public void updateMemberInfo(String nickname) {
+    public void updateMember(String nickname) {
         this.nickname = nickname;
-        log.info("Updated member info => id: {}, nickname: {}", this.id, this.nickname);
+    }
+
+    public void updateChild(String childName, Integer childGrade) {
+        this.childName = childName;
+        this.childGrade = childGrade;
     }
 }
