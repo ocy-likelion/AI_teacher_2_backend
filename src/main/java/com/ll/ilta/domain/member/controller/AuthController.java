@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.member.controller;
 
-import com.ll.ilta.domain.member.dto.response.MemberResponseDTO;
+import com.ll.ilta.domain.member.dto.MemberResponseDTO;
 import com.ll.ilta.domain.member.service.AuthService;
 import com.ll.ilta.global.payload.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;

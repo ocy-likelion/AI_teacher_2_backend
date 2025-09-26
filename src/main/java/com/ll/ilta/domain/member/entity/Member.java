@@ -25,12 +25,16 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
+    @Column(nullable = false, length = 50)
     private String nickname;
 
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @Column(nullable = false, length = 20)
     private String role;
 
     private String childName;
@@ -38,9 +42,7 @@ public class Member extends BaseEntity {
     private Integer childGrade;
 
     public void updateMemberInfo(String nickname) {
-       this.nickname=nickname;
+        this.nickname = nickname;
         log.info("Updated member info => id: {}, nickname: {}", this.id, this.nickname);
-
     }
-
 }

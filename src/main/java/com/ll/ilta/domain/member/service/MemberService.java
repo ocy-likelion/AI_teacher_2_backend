@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.member.service;
 
-import com.ll.ilta.domain.member.dto.request.MemberRequestDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO;
 import com.ll.ilta.domain.member.entity.Member;
 import java.util.List;
 

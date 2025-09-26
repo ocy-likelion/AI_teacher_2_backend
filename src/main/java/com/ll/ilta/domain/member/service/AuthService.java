@@ -1,6 +1,6 @@
 package com.ll.ilta.domain.member.service;
 
-import com.ll.ilta.domain.member.dto.response.MemberResponseDTO;
+import com.ll.ilta.domain.member.dto.MemberResponseDTO;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {

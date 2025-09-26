@@ -1,8 +1,8 @@
-package com.ll.ilta.global.security.common;
+package com.ll.ilta.global.security.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ll.ilta.global.payload.response.BaseResponse;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
+import com.ll.ilta.global.payload.response.BaseResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

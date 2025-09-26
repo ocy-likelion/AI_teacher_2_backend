@@ -1,7 +1,7 @@
 package com.ll.ilta.domain.member.service;
 
 
-import com.ll.ilta.domain.member.dto.request.MemberRequestDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO;
 import com.ll.ilta.domain.member.entity.Member;
 import com.ll.ilta.domain.member.repository.MemberRepository;
 import com.ll.ilta.global.payload.code.status.ErrorStatus;
@@ -9,7 +9,6 @@ import com.ll.ilta.global.payload.exception.handler.MemberHandler;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
 
     private Member findMemberOrThrow(Long memberId) {
         return memberRepository.findById(memberId)
@@ -63,6 +61,4 @@ public class MemberServiceImpl implements MemberService {
         log.info("MemberServiceImpl-updateMyInfo: After update: memberId={}, newNickname={}", memberId, member.getNickname());
         return member;
     }
-
-
 }

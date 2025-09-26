@@ -1,4 +1,4 @@
-package com.ll.ilta.domain.member.dto.response;
+package com.ll.ilta.domain.member.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;

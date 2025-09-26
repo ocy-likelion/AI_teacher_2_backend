@@ -1,4 +1,4 @@
-package com.ll.ilta.domain.member.dto.request;
+package com.ll.ilta.domain.member.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,6 @@ public class MemberRequestDTO {
 
         private String nickname;
         private String email;
-        private String password;
         private String role;
         @Schema(description = "프로필 이미지 URL", example = "https://image.com/profile.jpg")
         private String profileImageUrl;
@@ -31,7 +30,6 @@ public class MemberRequestDTO {
     public static class LoginRequestDTO {
 
         private String email;
-        private String password;
         @Schema(description = "인가 코드", example = "xxxxx")
         private String code;
     }

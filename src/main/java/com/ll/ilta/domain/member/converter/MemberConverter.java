@@ -1,7 +1,7 @@
 package com.ll.ilta.domain.member.converter;
 
-import com.ll.ilta.domain.member.dto.request.MemberRequestDTO;
-import com.ll.ilta.domain.member.dto.response.MemberResponseDTO;
+import com.ll.ilta.domain.member.dto.MemberRequestDTO;
+import com.ll.ilta.domain.member.dto.MemberResponseDTO;
 import com.ll.ilta.domain.member.entity.Member;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
