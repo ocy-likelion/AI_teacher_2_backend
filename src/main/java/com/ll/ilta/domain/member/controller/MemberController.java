@@ -5,8 +5,6 @@ import static com.ll.ilta.domain.member.converter.MemberConverter.toMemberPrevie
 import static com.ll.ilta.domain.member.converter.MemberConverter.toMemberPreviewListDTO;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.ilta.domain.member.dto.MemberRequestDTO.ChildRequestDTO;
 import com.ll.ilta.domain.member.dto.MemberRequestDTO.UpdateMemberDTO;
 import com.ll.ilta.domain.member.dto.MemberResponseDTO.ChildResponseDTO;
@@ -40,21 +38,11 @@ public class MemberController {
 
     @Operation(summary = "내 정보 조회", description = "JWT로 인증된 사용자 정보 조회")
     @GetMapping("/me/profile")
-    public BaseResponse<MemberPreviewDTO> readMember(
-        @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public BaseResponse<MemberPreviewDTO> readMember(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Long memberId = principalDetails.getMemberId();
-
         Member member = memberService.readMember(memberId);
-
         MemberPreviewDTO dto = toMemberPreviewDTO(member);
-
-        try {
-            String json = new ObjectMapper().writeValueAsString(dto);
-            System.out.println(">>>> 직렬화된 JSON: " + json);
-        } catch (JsonProcessingException e) {
-            System.out.println(">>>> JSON 직렬화 실패: " + e.getMessage());
-        }
 
         return BaseResponse.onSuccess(dto);
     }
@@ -68,8 +56,7 @@ public class MemberController {
 
     @Operation(summary = "회원 정보 수정", description = "이름, 프로필 사진 수정")
     @PatchMapping("/me/profile")
-    public BaseResponse<MemberPreviewDTO> updateMyInfo(
-        @AuthenticationPrincipal PrincipalDetails principalDetails,
+    public BaseResponse<MemberPreviewDTO> updateMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,
         @RequestBody UpdateMemberDTO updateMemberDTO) {
         Long memberId = principalDetails.getMemberId();
         Member member = memberService.updateMyInfo(updateMemberDTO, memberId);

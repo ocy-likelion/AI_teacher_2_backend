@@ -23,13 +23,12 @@ public class MemberConverter {
     }
 
     public static MemberPreviewDTO toMemberPreviewDTO(Member member) {
-        return MemberPreviewDTO.builder().memberId(member.getId()).nickname(member.getNickname())
-            .email(member.getEmail()).build();
+        return MemberPreviewDTO.builder().nickname(member.getNickname()).email(member.getEmail()).build();
     }
 
     public static ChildResponseDTO toChildDto(Member member) {
-        ChildResponseDTO childResponseDTO = ChildResponseDTO.builder().memberId(member.getId())
-            .childName(member.getChildName()).childGrade(member.getChildGrade()).build();
+        ChildResponseDTO childResponseDTO = ChildResponseDTO.builder().childName(member.getChildName())
+            .childGrade(member.getChildGrade()).build();
         return childResponseDTO;
     }
 
