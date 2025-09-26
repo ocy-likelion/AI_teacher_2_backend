@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "FavoriteV1Controller", description = "즐겨찾기 API")
-@RequestMapping("/api/v1/favorites")
+@Tag(name = "FavoriteController", description = "즐겨찾기 API")
+@RequestMapping("/api/v2/favorites")
 @RequiredArgsConstructor
 @RestController
-public class FavoriteV1Controller {
+public class FavoriteController {
 
     private final FavoriteService favoriteService;
 

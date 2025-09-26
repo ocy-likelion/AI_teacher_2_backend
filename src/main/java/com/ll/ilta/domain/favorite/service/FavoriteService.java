@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class FavoriteService {
 
-    private static final String FAVORITE_LIST_URL = "/api/v1/favorites/list";
+    private static final String FAVORITE_LIST_URL = "/api/v2/favorites/list";
 
     private final FavoriteRepository favoriteRepository;
     private final ProblemRepository problemRepository;
