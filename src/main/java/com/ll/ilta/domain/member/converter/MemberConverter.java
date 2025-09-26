@@ -23,9 +23,8 @@ public class MemberConverter {
     }
 
     public static MemberPreviewDTO toMemberPreviewDTO(Member member) {
-        MemberPreviewDTO dto = MemberPreviewDTO.builder().memberId(member.getId()).nickname(member.getNickname())
-            .updateAt(member.getUpdatedAt()).createAt(member.getCreatedAt()).build();
-        return dto;
+        return MemberPreviewDTO.builder().memberId(member.getId()).nickname(member.getNickname())
+            .email(member.getEmail()).build();
     }
 
     public static ChildResponseDTO toChildDto(Member member) {

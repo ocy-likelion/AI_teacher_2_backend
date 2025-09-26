@@ -31,8 +31,7 @@ public class MemberResponseDTO {
 
         private Long memberId;
         private String nickname;
-        private LocalDateTime updateAt;
-        private LocalDateTime createAt;
+        private String email;
     }
 
     @Getter
