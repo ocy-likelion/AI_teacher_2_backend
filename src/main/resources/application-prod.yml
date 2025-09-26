@@ -7,29 +7,7 @@ kakao:
     client: ${KAKAO_CLIENT_ID}
     redirect: ${KAKAO_REDIRECT_URL}
 
-custom:
-  site:
-    name: "ilta_prod"
-    cookieDomain: ilta-api.onrender.com
-    frontUrl: "https://ilta-web.onrender.com"
-    backUrl: "https://ilta-api.onrender.com"
-
 spring:
-  datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
   hikari:
     maximum-pool-size: 20
     minimum-idle: 5
-    idle-timeout: 300000
-    connection-timeout: 30000
-    max-lifetime: 1800000
-
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: 3600000
-
-ai:
-  service:
-    url: ${AI_SERVICE_URL}

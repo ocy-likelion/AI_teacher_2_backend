@@ -2,7 +2,7 @@ package com.ll.ilta.domain.image.controller;
 
 import com.ll.ilta.domain.problem.dto.ProblemResponseDto;
 import com.ll.ilta.domain.problem.service.ProblemService;
-import com.ll.ilta.global.security.v2.member.PrincipalDetails;
+import com.ll.ilta.global.security.member.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
